@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#0d0d18">
+<title>중2 YBM 영어 1과 · Know Me Know You</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Gmarket+Sans:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d0d18;--bg2:#141425;--bg3:#1c1c30;
+  --border:#252540;--border2:#30305a;
+  --p1:#6c63ff;--p2:#8b85ff;--p3:#bbb8ff;
+  --g1:#22d3a5;--g2:#34d399;
+  --o1:#f59e0b;--o2:#fbbf24;
+  --r1:#f43f5e;--r2:#fb7185;
+  --t1:#e8e8f5;--t2:#a0a0c8;--t3:#5a5a80;
+  --card-r:16px;--nav-h:68px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+html{width:100%;height:100%;background:var(--bg);}
+body{font-family:'Noto Sans KR',sans-serif;color:var(--t1);width:100%;height:100%;overflow:hidden;background:var(--bg);}
+
+/* ── LAYOUT ── */
+#app{display:flex;flex-direction:column;height:100%;max-width:480px;margin:0 auto;position:relative;overflow:hidden;}
+#main{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(var(--nav-h) + var(--safe-bottom));-webkit-overflow-scrolling:touch;}
+#main::-webkit-scrollbar{display:none;}
+
+/* iOS 터치 픽스 */
+button,a,[onclick]{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+.mode-card,.submode-card,.diff-card,.sentence-card,.card-scene,.tf-btn,.order-item{
+  cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);
+  -webkit-user-select:none;user-select:none;
+}
+#nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:calc(var(--nav-h) + var(--safe-bottom));background:var(--bg2);border-top:1px solid var(--border);display:flex;padding-bottom:var(--safe-bottom);z-index:999;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;transition:all .2s;border:none;background:none;color:var(--t3);font-family:'Noto Sans KR',sans-serif;padding:8px 0;}
+.nav-btn.active{color:var(--p1);}
+.nav-btn .nav-icon{font-size:22px;transition:transform .2s;}
+.nav-btn.active .nav-icon{transform:scale(1.15);}
+.nav-btn .nav-label{font-size:10px;font-weight:500;}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100%;animation:fadeIn .2s ease;}
+.screen.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── HOME ── */
+.home-header{padding:28px 20px 16px;background:linear-gradient(180deg,var(--bg2) 0%,transparent 100%);}
+.home-greeting{font-size:12px;color:var(--t3);font-weight:300;margin-bottom:4px;}
+.home-title{font-family:'Gmarket Sans',sans-serif;font-size:22px;font-weight:700;line-height:1.3;}
+.home-title span{color:var(--p1);}
+.lesson-badge{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--p3);margin-top:10px;}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px 20px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);padding:14px 12px;text-align:center;}
+.stat-num{font-family:'Gmarket Sans',sans-serif;font-size:26px;font-weight:700;}
+.stat-lbl{font-size:10px;color:var(--t3);margin-top:2px;}
+
+.section-title{font-size:12px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.2px;padding:0 20px;margin-bottom:12px;}
+.mode-cards{display:flex;flex-direction:column;gap:10px;padding:0 20px 20px;}
+.mode-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);padding:16px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all .15s;position:relative;overflow:hidden;width:100%;text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--t1);-webkit-appearance:none;appearance:none;touch-action:manipulation;}
+.mode-card:active{transform:scale(.97);background:var(--bg3);}
+.mode-icon-wrap{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.mode-info{flex:1;}
+.mode-name{font-size:15px;font-weight:700;margin-bottom:2px;}
+.mode-desc{font-size:12px;color:var(--t2);}
+.mode-badge-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.mode-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;}
+.mode-arrow{font-size:16px;color:var(--t3);}
+
+/* ── QUIZ UI ── */
+.quiz-header{padding:16px 20px 0;}
+.quiz-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.quiz-back{width:36px;height:36px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;}
+.quiz-mode-title{font-size:14px;font-weight:700;color:var(--t2);}
+.quiz-score-badge{font-family:'Gmarket Sans',sans-serif;font-size:13px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:4px 12px;}
+
+.progress-wrap{margin-bottom:16px;}
+.progress-track{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--p1),var(--p3));border-radius:2px;transition:width .4s ease;}
+.q-count{font-size:11px;color:var(--t3);margin-top:6px;text-align:right;}
+
+.quiz-body{padding:0 20px;}
+.q-label{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
+.q-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);padding:20px;margin-bottom:16px;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.q-text{font-size:17px;font-weight:700;line-height:1.5;word-break:keep-all;}
+.q-sub{font-size:12px;color:var(--t2);margin-top:6px;font-weight:300;}
+.q-hint{font-size:11px;color:var(--t3);margin-top:8px;}
+
+/* ── CHOICES ── */
+.choices{display:flex;flex-direction:column;gap:9px;}
+.choice{width:100%;padding:14px 16px;border-radius:13px;border:1px solid var(--border);background:var(--bg2);color:var(--t1);font-size:14px;font-weight:500;cursor:pointer;text-align:left;transition:all .18s;font-family:'Noto Sans KR',sans-serif;display:flex;align-items:center;gap:10px;word-break:keep-all;line-height:1.4;}
+.choice .c-label{width:26px;height:26px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all .18s;color:var(--t2);}
+.choice:active:not(.disabled){transform:scale(.98);}
+.choice:hover:not(.disabled){border-color:var(--p1);}
+.choice:hover:not(.disabled) .c-label{background:var(--p1);border-color:var(--p1);color:#fff;}
+.choice.correct{border-color:var(--g1);background:rgba(34,211,165,.07);}
+.choice.correct .c-label{background:var(--g1);border-color:var(--g1);color:#000;}
+.choice.wrong{border-color:var(--r1);background:rgba(244,63,94,.07);}
+.choice.wrong .c-label{background:var(--r1);border-color:var(--r1);color:#fff;}
+.choice.disabled{cursor:default;}
+
+/* ── FEEDBACK ── */
+.feedback{padding:12px 16px;border-radius:12px;font-size:13px;font-weight:500;margin-top:10px;display:none;word-break:keep-all;line-height:1.5;}
+.feedback.show{display:block;}
+.feedback.ok{background:rgba(34,211,165,.1);border:1px solid rgba(34,211,165,.3);color:var(--g1);}
+.feedback.bad{background:rgba(244,63,94,.1);border:1px solid rgba(244,63,94,.3);color:var(--r2);}
+
+/* ── INPUT ── */
+.input-wrap{display:flex;flex-direction:column;gap:8px;}
+.q-input{width:100%;padding:14px 16px;border-radius:13px;border:1px solid var(--border);background:var(--bg2);color:var(--t1);font-size:16px;font-weight:500;outline:none;transition:border-color .2s;font-family:'Noto Sans KR',sans-serif;text-align:center;}
+.q-input:focus{border-color:var(--p1);}
+.q-input.ok{border-color:var(--g1);color:var(--g1);}
+.q-input.bad{border-color:var(--r1);color:var(--r1);}
+
+/* ── BUTTONS ── */
+.btn{width:100%;padding:15px;border-radius:13px;border:none;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Noto Sans KR',sans-serif;margin-top:12px;}
+.btn-primary{background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;}
+.btn-primary:active{opacity:.9;transform:scale(.98);}
+.btn-ghost{background:var(--bg2);border:1px solid var(--border);color:var(--t2);}
+.btn-ghost:active{background:var(--bg3);}
+.btn-green{background:linear-gradient(135deg,#059669,var(--g1));color:#fff;}
+.btn-sm{font-size:13px;padding:12px;border-radius:11px;}
+
+/* ── NEXT BTN ── */
+.next-btn{width:100%;padding:15px;border-radius:13px;border:none;background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;margin-top:14px;display:none;transition:all .2s;}
+.next-btn.show{display:block;}
+.next-btn:active{opacity:.9;}
+.check-btn{width:100%;padding:15px;border-radius:13px;border:none;background:var(--p1);color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;margin-top:12px;transition:all .2s;}
+.check-btn:active{opacity:.9;}
+
+/* ── ORDERING QUIZ ── */
+.order-items{display:flex;flex-direction:column;gap:8px;}
+.order-item{padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);font-size:13px;cursor:grab;display:flex;align-items:center;gap:10px;transition:all .2s;word-break:keep-all;line-height:1.5;}
+.order-item .drag-handle{color:var(--t3);font-size:16px;flex-shrink:0;}
+.order-item.dragging{opacity:.5;border-style:dashed;}
+.order-item.correct-pos{border-color:var(--g1);}
+.order-item.wrong-pos{border-color:var(--r1);}
+
+/* ── TF QUIZ ── */
+.tf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.tf-btn{padding:20px;border-radius:14px;border:2px solid var(--border);background:var(--bg2);font-size:24px;cursor:pointer;text-align:center;transition:all .15s;font-family:'Noto Sans KR',sans-serif;color:var(--t1);-webkit-appearance:none;appearance:none;touch-action:manipulation;}
+.tf-btn .tf-label{font-size:13px;font-weight:700;margin-top:6px;color:var(--t2);}
+.tf-btn:active{transform:scale(.96);}
+.tf-btn.selected-t{border-color:var(--g1);background:rgba(34,211,165,.08);}
+.tf-btn.selected-f{border-color:var(--r1);background:rgba(244,63,94,.08);}
+.tf-btn.correct{border-color:var(--g1);background:rgba(34,211,165,.12);}
+.tf-btn.wrong{border-color:var(--r1);background:rgba(244,63,94,.12);}
+
+/* ── RESULT ── */
+.result-wrap{padding:32px 20px;display:flex;flex-direction:column;align-items:center;gap:20px;}
+.result-emoji{font-size:72px;animation:popIn .5s cubic-bezier(.4,0,.2,1);}
+@keyframes popIn{from{transform:scale(0)rotate(-10deg);}to{transform:scale(1)rotate(0);}}
+.result-title{font-family:'Gmarket Sans',sans-serif;font-size:26px;font-weight:700;text-align:center;}
+.result-score{font-family:'Gmarket Sans',sans-serif;font-size:60px;font-weight:700;background:linear-gradient(135deg,var(--p1),var(--g1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.result-pct{font-size:14px;color:var(--t2);margin-top:-14px;}
+.result-detail{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);padding:18px 20px;display:flex;flex-direction:column;gap:12px;}
+.result-row{display:flex;justify-content:space-between;align-items:center;}
+.result-row .rl{font-size:13px;color:var(--t2);}
+.result-row .rv{font-size:14px;font-weight:700;font-family:'Gmarket Sans',sans-serif;}
+.wrong-list{width:100%;max-height:200px;overflow-y:auto;}
+.wrong-item{background:var(--bg2);border:1px solid rgba(244,63,94,.3);border-radius:11px;padding:12px 14px;margin-bottom:8px;font-size:13px;}
+.wrong-item .wi-q{color:var(--t2);margin-bottom:4px;}
+.wrong-item .wi-a{color:var(--g1);font-weight:600;}
+.wrong-item .wi-y{color:var(--r2);}
+
+/* ── STUDY MODE (FLASHCARD) ── */
+.card-scene{perspective:1200px;margin:0 20px 16px;cursor:pointer;}
+.card-inner{width:100%;min-height:200px;position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1);}
+.card-inner.flipped{transform:rotateY(180deg);}
+.card-face{position:absolute;width:100%;min-height:200px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px 24px;text-align:center;}
+.card-back{transform:rotateY(180deg);background:var(--bg3);border-color:var(--p1);}
+.card-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:var(--t3);margin-bottom:14px;}
+.card-word{font-size:32px;font-weight:900;font-family:'Gmarket Sans',sans-serif;}
+.card-hint{font-size:12px;color:var(--t3);margin-top:8px;}
+.card-answer{font-size:24px;font-weight:700;color:var(--g1);line-height:1.3;}
+.flip-hint{text-align:center;font-size:12px;color:var(--t3);padding:0 20px 12px;}
+.fc-nav{display:flex;gap:10px;padding:0 20px;}
+
+/* ── READING STUDY ── */
+.passage-wrap{padding:0 20px 20px;}
+.passage-header{background:linear-gradient(135deg,rgba(108,99,255,.15),rgba(34,211,165,.1));border:1px solid var(--border2);border-radius:14px;padding:16px;margin-bottom:16px;}
+.passage-title{font-family:'Gmarket Sans',sans-serif;font-size:18px;font-weight:700;color:var(--p3);margin-bottom:6px;}
+.passage-subtitle{font-size:12px;color:var(--t2);}
+.sentence-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:all .15s;width:100%;text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--t1);-webkit-appearance:none;appearance:none;touch-action:manipulation;}
+.sentence-card:active{background:var(--bg3);}
+.sentence-en{font-size:14px;font-weight:500;line-height:1.6;color:var(--t1);}
+.sentence-ko{font-size:13px;color:var(--t2);margin-top:6px;display:none;font-weight:300;}
+.sentence-card.revealed .sentence-ko{display:block;}
+.sentence-num{font-size:10px;color:var(--t3);margin-bottom:6px;font-family:'Gmarket Sans',sans-serif;}
+
+/* ── GRAMMAR STUDY ── */
+.grammar-wrap{padding:0 20px 20px;}
+.grammar-section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;}
+.grammar-section-title{font-size:15px;font-weight:700;color:var(--p3);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.rule-item{font-size:13px;color:var(--t2);margin-bottom:8px;padding-left:12px;border-left:2px solid var(--border2);line-height:1.6;}
+.example-item{background:var(--bg3);border-radius:10px;padding:10px 12px;margin-top:8px;font-size:13px;}
+.example-en{color:var(--t1);}
+.example-en mark{background:rgba(108,99,255,.25);color:var(--p3);border-radius:4px;padding:0 3px;}
+.example-ko{color:var(--t3);margin-top:4px;font-size:12px;}
+
+/* ── PROGRESS SCREEN ── */
+.progress-wrap{padding:20px;}
+.progress-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--card-r);padding:18px;margin-bottom:14px;}
+.progress-section-title{font-size:13px;font-weight:700;color:var(--t2);margin-bottom:14px;}
+.progress-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.progress-label{font-size:13px;color:var(--t1);}
+.progress-val{font-size:13px;font-weight:700;font-family:'Gmarket Sans',sans-serif;color:var(--p3);}
+.progress-bar-sm{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden;margin:0 12px;}
+.progress-bar-fill-sm{height:100%;background:linear-gradient(90deg,var(--p1),var(--p3));border-radius:3px;transition:width .5s ease;}
+
+/* ── DIFFICULTY SELECT ── */
+.diff-wrap{padding:20px;}
+.diff-title{font-family:'Gmarket Sans',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.diff-sub{font-size:13px;color:var(--t2);margin-bottom:24px;}
+.diff-card{background:var(--bg2);border:2px solid var(--border);border-radius:16px;padding:20px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:all .15s;width:100%;text-align:left;font-family:'Noto Sans KR',sans-serif;color:var(--t1);-webkit-appearance:none;appearance:none;touch-action:manipulation;}
+.diff-card:active{transform:scale(.97);background:var(--bg3);}
+.diff-card.selected{border-color:var(--p1);background:rgba(108,99,255,.06);}
+.diff-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.diff-info .diff-name{font-size:16px;font-weight:700;margin-bottom:3px;}
+.diff-info .diff-desc{font-size:12px;color:var(--t2);}
+.diff-stars{font-size:14px;margin-left:auto;}
+
+/* ── LOADING ── */
+.loading-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:16px;}
+.loader{width:44px;height:44px;border:3px solid var(--border);border-top-color:var(--p1);border-radius:50%;animation:spin 1s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-size:14px;color:var(--t2);text-align:center;}
+.loading-sub{font-size:12px;color:var(--t3);text-align:center;}
+
+/* ── TYPE BADGES ── */
+.type-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;margin-left:6px;vertical-align:middle;}
+.type-mc{background:rgba(108,99,255,.2);color:var(--p3);}
+.type-tf{background:rgba(245,158,11,.2);color:var(--o2);}
+.type-fill{background:rgba(34,211,165,.2);color:var(--g1);}
+.type-order{background:rgba(244,63,94,.2);color:var(--r2);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:calc(var(--nav-h) + var(--safe-bottom) + 12px);left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg3);border:1px solid var(--border);color:var(--t1);padding:10px 18px;border-radius:24px;font-size:13px;font-weight:500;opacity:0;transition:all .3s;z-index:999;white-space:nowrap;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── MISC ── */
+.section-header{padding:20px 20px 0;}
+.section-header .quiz-back{margin-bottom:12px;}
+.section-header h2{font-family:'Gmarket Sans',sans-serif;font-size:20px;font-weight:700;}
+.section-header p{font-size:13px;color:var(--t2);margin-top:4px;}
+
+.submode-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px 20px;}
+.submode-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px 14px;cursor:pointer;text-align:center;transition:all .15s;font-family:'Noto Sans KR',sans-serif;color:var(--t1);width:100%;-webkit-appearance:none;appearance:none;touch-action:manipulation;}
+.submode-card:active{transform:scale(.96);background:var(--bg3);}
+.submode-card .sm-icon{font-size:28px;margin-bottom:8px;}
+.submode-card .sm-name{font-size:13px;font-weight:700;}
+.submode-card .sm-desc{font-size:11px;color:var(--t3);margin-top:3px;}
+.submode-card.wide{grid-column:1/-1;}
+
+.divider{height:1px;background:var(--border);margin:4px 20px;}
+.spacer{height:16px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="main">
+    <!-- ══ HOME ══ -->
+    <div class="screen active" id="screen-home">
+      <div class="home-header">
+        <div class="home-greeting">중학교 2학년 영어 YBM 박준언</div>
+        <div class="home-title">1과 · <span>Know Me,</span><br>Know You</div>
+        <div class="lesson-badge">📚 Different but Together · 최상급 · to부정사</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-total" style="color:var(--p1)">0</div>
+          <div class="stat-lbl">총 학습</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-correct" style="color:var(--g1)">0</div>
+          <div class="stat-lbl">정답</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-rate" style="color:var(--o1)">—</div>
+          <div class="stat-lbl">정답률</div>
+        </div>
+      </div>
+      <div class="section-title">학습 모드 선택</div>
+      <div class="mode-cards">
+        <button class="mode-card" onclick="selectMode('vocab')">
+          <div class="mode-icon-wrap" style="background:rgba(108,99,255,.15);">📝</div>
+          <div class="mode-info">
+            <div class="mode-name">어휘 학습</div>
+            <div class="mode-desc">단어·표현·영영풀이 마스터</div>
+          </div>
+          <div class="mode-badge-wrap">
+            <div class="mode-badge" style="background:rgba(108,99,255,.15);color:var(--p3);">70+ 단어</div>
+            <div class="mode-arrow">›</div>
+          </div>
+        </button>
+        <button class="mode-card" onclick="selectMode('grammar')">
+          <div class="mode-icon-wrap" style="background:rgba(245,158,11,.15);">✏️</div>
+          <div class="mode-info">
+            <div class="mode-name">문법 학습</div>
+            <div class="mode-desc">최상급 · to부정사 형용사적 용법</div>
+          </div>
+          <div class="mode-badge-wrap">
+            <div class="mode-badge" style="background:rgba(245,158,11,.15);color:var(--o2);">2 단원</div>
+            <div class="mode-arrow">›</div>
+          </div>
+        </button>
+        <button class="mode-card" onclick="selectMode('dialogue')">
+          <div class="mode-icon-wrap" style="background:rgba(34,211,165,.15);">💬</div>
+          <div class="mode-info">
+            <div class="mode-name">대화문 학습</div>
+            <div class="mode-desc">순서배열 · 빈칸 · 일치/불일치</div>
+          </div>
+          <div class="mode-badge-wrap">
+            <div class="mode-badge" style="background:rgba(34,211,165,.15);color:var(--g1);">8 대화</div>
+            <div class="mode-arrow">›</div>
+          </div>
+        </button>
+        <button class="mode-card" onclick="selectMode('reading')">
+          <div class="mode-icon-wrap" style="background:rgba(244,63,94,.15);">📖</div>
+          <div class="mode-info">
+            <div class="mode-name">본문 학습</div>
+            <div class="mode-desc">본문 읽기 · 빈칸완성 · 내용이해</div>
+          </div>
+          <div class="mode-badge-wrap">
+            <div class="mode-badge" style="background:rgba(244,63,94,.15);color:var(--r2);">독해</div>
+            <div class="mode-arrow">›</div>
+          </div>
+        </button>
+        <button class="mode-card" onclick="selectMode('comprehensive')">
+          <div class="mode-icon-wrap" style="background:linear-gradient(135deg,rgba(108,99,255,.15),rgba(34,211,165,.1));">🏆</div>
+          <div class="mode-info">
+            <div class="mode-name">통합 테스트</div>
+            <div class="mode-desc">전범위 AI 문제 · 난이도 선택</div>
+          </div>
+          <div class="mode-badge-wrap">
+            <div class="mode-badge" style="background:linear-gradient(135deg,rgba(108,99,255,.2),rgba(34,211,165,.2));color:var(--p3);">AI</div>
+            <div class="mode-arrow">›</div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ VOCAB MODE ══ -->
+    <div class="screen" id="screen-vocab">
+      <div class="section-header">
+        <button class="quiz-back" onclick="goHome()">←</button>
+        <h2 style="margin-top:12px;">어휘 학습</h2>
+        <p>플래시카드, 영한/한영, 영영풀이 퀴즈</p>
+      </div>
+      <div class="submode-grid" style="margin-top:16px;">
+        <button class="submode-card" onclick="startFlashcard()">
+          <div class="sm-icon">🃏</div>
+          <div class="sm-name">플래시카드</div>
+          <div class="sm-desc">단어 암기</div>
+        </button>
+        <button class="submode-card" onclick="selectDifficulty('vocab-enkor')">
+          <div class="sm-icon">🔤</div>
+          <div class="sm-name">영→한</div>
+          <div class="sm-desc">뜻 맞히기</div>
+        </button>
+        <button class="submode-card" onclick="selectDifficulty('vocab-koren')">
+          <div class="sm-icon">🇰🇷</div>
+          <div class="sm-name">한→영</div>
+          <div class="sm-desc">영어 쓰기</div>
+        </button>
+        <button class="submode-card" onclick="selectDifficulty('vocab-def')">
+          <div class="sm-icon">📗</div>
+          <div class="sm-name">영영풀이</div>
+          <div class="sm-desc">영영 정의 학습</div>
+        </button>
+        <button class="submode-card wide" onclick="selectDifficulty('vocab-ai')">
+          <div class="sm-icon">🤖</div>
+          <div class="sm-name">AI 어휘 문제</div>
+          <div class="sm-desc">Claude AI가 다양한 문제를 실시간 생성 · 중복 없음</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ GRAMMAR MODE ══ -->
+    <div class="screen" id="screen-grammar">
+      <div class="section-header">
+        <button class="quiz-back" onclick="goHome()">←</button>
+        <h2 style="margin-top:12px;">문법 학습</h2>
+        <p>최상급 · to부정사의 형용사적 용법</p>
+      </div>
+      <div class="submode-grid" style="margin-top:16px;">
+        <button class="submode-card wide" onclick="showGrammarStudy()">
+          <div class="sm-icon">📐</div>
+          <div class="sm-name">문법 설명 보기</div>
+          <div class="sm-desc">핵심 문법 규칙 + 예문 정리</div>
+        </button>
+        <button class="submode-card" onclick="selectDifficulty('grammar-super')">
+          <div class="sm-icon">⭐</div>
+          <div class="sm-name">최상급</div>
+          <div class="sm-desc">-est / most</div>
+        </button>
+        <button class="submode-card" onclick="selectDifficulty('grammar-toinf')">
+          <div class="sm-icon">🔗</div>
+          <div class="sm-name">to부정사</div>
+          <div class="sm-desc">형용사적 용법</div>
+        </button>
+        <button class="submode-card wide" onclick="selectDifficulty('grammar-ai')">
+          <div class="sm-icon">🤖</div>
+          <div class="sm-name">AI 문법 문제</div>
+          <div class="sm-desc">난이도별 AI 생성 · 서술형/선택형 혼합</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ DIALOGUE MODE ══ -->
+    <div class="screen" id="screen-dialogue">
+      <div class="section-header">
+        <button class="quiz-back" onclick="goHome()">←</button>
+        <h2 style="margin-top:12px;">대화문 학습</h2>
+        <p>순서배열 · 빈칸완성 · 일치/불일치 · 포인트 어법</p>
+      </div>
+      <div class="submode-grid" style="margin-top:16px;">
+        <button class="submode-card" onclick="selectDifficulty('dialogue-tf')">
+          <div class="sm-icon">✅</div>
+          <div class="sm-name">일치/불일치</div>
+          <div class="sm-desc">T/F 문제</div>
+        </button>
+        <button class="submode-card" onclick="selectDifficulty('dialogue-mc')">
+          <div class="sm-icon">🎯</div>
+          <div class="sm-name">내용 이해</div>
+          <div class="sm-desc">객관식</div>
+        </button>
+        <button class="submode-card" onclick="selectDifficulty('dialogue-fill')">
+          <div class="sm-icon">📝</div>
+          <div class="sm-name">빈칸 완성</div>
+          <div class="sm-desc">대화 빈칸</div>
+        </button>
+        <button class="submode-card" onclick="selectDifficulty('dialogue-order')">
+          <div class="sm-icon">🔢</div>
+          <div class="sm-name">순서 배열</div>
+          <div class="sm-desc">대화 순서</div>
+        </button>
+        <button class="submode-card wide" onclick="selectDifficulty('dialogue-ai')">
+          <div class="sm-icon">🤖</div>
+          <div class="sm-name">AI 대화문 문제</div>
+          <div class="sm-desc">포인트 어법 · 빈칸 · 해석 등 AI 생성</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ READING MODE ══ -->
+    <div class="screen" id="screen-reading">
+      <div class="section-header">
+        <button class="quiz-back" onclick="goHome()">←</button>
+        <h2 style="margin-top:12px;">본문 학습</h2>
+        <p>Different but Together</p>
+      </div>
+      <div class="submode-grid" style="margin-top:16px;">
+        <button class="submode-card wide" onclick="showReadingStudy()">
+          <div class="sm-icon">📖</div>
+          <div class="sm-name">본문 읽기</div>
+          <div class="sm-desc">문장 탭 → 한국어 해석 확인</div>
+        </button>
+        <button class="submode-card" onclick="selectDifficulty('reading-tf')">
+          <div class="sm-icon">✅</div>
+          <div class="sm-name">내용 일치</div>
+          <div class="sm-desc">T/F 문제</div>
+        </button>
+        <button class="submode-card" onclick="selectDifficulty('reading-mc')">
+          <div class="sm-icon">🎯</div>
+          <div class="sm-name">내용 이해</div>
+          <div class="sm-desc">객관식</div>
+        </button>
+        <button class="submode-card wide" onclick="selectDifficulty('reading-ai')">
+          <div class="sm-icon">🤖</div>
+          <div class="sm-name">AI 독해 문제</div>
+          <div class="sm-desc">빈칸·어법·내용이해 AI 생성 · 무한 생성</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ DIFFICULTY SELECT ══ -->
+    <div class="screen" id="screen-difficulty">
+      <div class="quiz-header">
+        <div class="quiz-top">
+          <button class="quiz-back" id="diff-back" onclick="diffBack()">←</button>
+          <div class="quiz-mode-title" id="diff-title">난이도 선택</div>
+          <div style="width:36px;"></div>
+        </div>
+      </div>
+      <div class="diff-wrap">
+        <div class="diff-title" id="diff-header">문제 유형</div>
+        <div class="diff-sub" id="diff-sub">학습 난이도를 선택하세요</div>
+        <button class="diff-card" onclick="startQuiz('basic')" id="diff-basic">
+          <div class="diff-icon" style="background:rgba(34,211,165,.15);">🌱</div>
+          <div class="diff-info">
+            <div class="diff-name">기본</div>
+            <div class="diff-desc">기초 어휘 및 핵심 표현</div>
+          </div>
+          <div class="diff-stars">⭐</div>
+        </button>
+        <button class="diff-card" onclick="startQuiz('advanced')" id="diff-advanced">
+          <div class="diff-icon" style="background:rgba(245,158,11,.15);">🌿</div>
+          <div class="diff-info">
+            <div class="diff-name">발전</div>
+            <div class="diff-desc">문맥 활용 및 응용 표현</div>
+          </div>
+          <div class="diff-stars">⭐⭐</div>
+        </button>
+        <button class="diff-card" onclick="startQuiz('expert')" id="diff-expert">
+          <div class="diff-icon" style="background:rgba(244,63,94,.15);">🌳</div>
+          <div class="diff-info">
+            <div class="diff-name">심화</div>
+            <div class="diff-desc">고난도 통합 · 영작 · 어법</div>
+          </div>
+          <div class="diff-stars">⭐⭐⭐</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ QUIZ ══ -->
+    <div class="screen" id="screen-quiz">
+      <div class="quiz-header">
+        <div class="quiz-top">
+          <button class="quiz-back" onclick="quitQuiz()">←</button>
+          <div class="quiz-mode-title" id="quiz-mode-label">퀴즈</div>
+          <div class="quiz-score-badge"><span id="q-correct">0</span>/<span id="q-total">10</span></div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" id="q-progress"></div></div>
+          <div class="q-count" id="q-count-label">1 / 10</div>
+        </div>
+      </div>
+      <div class="quiz-body" id="quiz-body">
+        <!-- dynamic -->
+      </div>
+    </div>
+
+    <!-- ══ LOADING ══ -->
+    <div class="screen" id="screen-loading">
+      <div class="loading-wrap" style="height:80vh;">
+        <div class="loader"></div>
+        <div class="loading-text">AI 문제 생성 중...</div>
+        <div class="loading-sub" id="loading-sub">Claude AI가 맞춤 문제를 만들고 있어요</div>
+      </div>
+    </div>
+
+    <!-- ══ RESULT ══ -->
+    <div class="screen" id="screen-result">
+      <div class="result-wrap">
+        <div class="result-emoji" id="r-emoji">🎉</div>
+        <div class="result-title" id="r-title">수고했어요!</div>
+        <div class="result-score" id="r-score">8/10</div>
+        <div class="result-pct" id="r-pct">정답률 80%</div>
+        <div class="result-detail">
+          <div class="result-row"><span class="rl">✅ 정답</span><span class="rv" style="color:var(--g1)" id="r-correct">0</span></div>
+          <div class="result-row"><span class="rl">❌ 오답</span><span class="rv" style="color:var(--r1)" id="r-wrong">0</span></div>
+          <div class="result-row"><span class="rl">⏱ 소요시간</span><span class="rv" id="r-time">0:00</span></div>
+        </div>
+        <div style="width:100%;" id="r-wrong-wrap">
+          <div class="section-title" style="padding:0;margin-bottom:8px;">틀린 문제 복습</div>
+          <div class="wrong-list" id="r-wrong-list"></div>
+        </div>
+        <button class="btn btn-primary" id="r-retry" onclick="retryQuiz()">다시 풀기 🔄</button>
+        <button class="btn btn-ghost" onclick="goHome()">홈으로 🏠</button>
+      </div>
+    </div>
+
+    <!-- ══ FLASHCARD ══ -->
+    <div class="screen" id="screen-flashcard">
+      <div class="quiz-header">
+        <div class="quiz-top">
+          <button class="quiz-back" onclick="showScreen('screen-vocab')">←</button>
+          <div class="quiz-mode-title">플래시카드</div>
+          <div class="quiz-score-badge" id="fc-counter">1/70</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" id="fc-progress"></div></div>
+        </div>
+      </div>
+      <div class="flip-hint">👆 카드를 탭하면 뜻이 보여요</div>
+      <div class="card-scene" onclick="flipFC()">
+        <div class="card-inner" id="fc-inner">
+          <div class="card-face">
+            <div class="card-tag">English</div>
+            <div class="card-word" id="fc-word"></div>
+            <div class="card-hint" id="fc-hint"></div>
+          </div>
+          <div class="card-face card-back">
+            <div class="card-tag" style="color:var(--g1);">한국어</div>
+            <div class="card-answer" id="fc-answer"></div>
+            <div class="card-hint" id="fc-desc"></div>
+          </div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button class="btn btn-ghost btn-sm" onclick="fcPrev()" style="flex:1;">← 이전</button>
+        <button class="btn btn-primary btn-sm" onclick="fcNext()" style="flex:2;" id="fc-next-btn">다음 →</button>
+      </div>
+    </div>
+
+    <!-- ══ READING STUDY ══ -->
+    <div class="screen" id="screen-reading-study">
+      <div class="quiz-header">
+        <div class="quiz-top">
+          <button class="quiz-back" onclick="showScreen('screen-reading')">←</button>
+          <div class="quiz-mode-title">본문 읽기</div>
+          <div style="width:36px;"></div>
+        </div>
+      </div>
+      <div class="passage-wrap">
+        <div class="passage-header">
+          <div class="passage-title">Different but Together</div>
+          <div class="passage-subtitle">다르지만 함께 · 탭하면 한국어 해석이 나와요</div>
+        </div>
+        <div id="passage-sentences"><!-- dynamic --></div>
+      </div>
+    </div>
+
+    <!-- ══ GRAMMAR STUDY ══ -->
+    <div class="screen" id="screen-grammar-study">
+      <div class="quiz-header">
+        <div class="quiz-top">
+          <button class="quiz-back" onclick="showScreen('screen-grammar')">←</button>
+          <div class="quiz-mode-title">문법 설명</div>
+          <div style="width:36px;"></div>
+        </div>
+      </div>
+      <div class="grammar-wrap" id="grammar-content-wrap"><!-- dynamic --></div>
+    </div>
+
+    <!-- ══ PROGRESS ══ -->
+    <div class="screen" id="screen-progress">
+      <div class="section-header" style="padding-bottom:16px;">
+        <h2>학습 진도</h2>
+        <p>분야별 학습 현황을 확인하세요</p>
+      </div>
+      <div class="progress-wrap" id="progress-content"><!-- dynamic --></div>
+    </div>
+
+  </div><!-- /main -->
+
+  <!-- Bottom Nav -->
+  <nav id="nav">
+    <button class="nav-btn active" id="nav-home" onclick="navTo('home')">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">홈</span>
+    </button>
+    <button class="nav-btn" id="nav-vocab" onclick="navTo('vocab')">
+      <span class="nav-icon">📝</span>
+      <span class="nav-label">어휘</span>
+    </button>
+    <button class="nav-btn" id="nav-grammar" onclick="navTo('grammar')">
+      <span class="nav-icon">✏️</span>
+      <span class="nav-label">문법</span>
+    </button>
+    <button class="nav-btn" id="nav-dialogue" onclick="navTo('dialogue')">
+      <span class="nav-icon">💬</span>
+      <span class="nav-label">대화</span>
+    </button>
+    <button class="nav-btn" id="nav-progress" onclick="navTo('progress')">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">진도</span>
+    </button>
+  </nav>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+// TEXTBOOK DATA
+// ═══════════════════════════════════════
+const VOCAB = [
+  {en:'activity',ko:'활동',hint:'active 활동적인',cat:'listen'},
+  {en:'caring',ko:'배려하는, 보살피는',hint:'',cat:'listen'},
+  {en:'cheerful',ko:'쾌활한, 발랄한',hint:'',cat:'listen'},
+  {en:'creative',ko:'창의적인',hint:'create 창조하다',cat:'listen'},
+  {en:'curious',ko:'호기심 많은',hint:'',cat:'listen'},
+  {en:'friendly',ko:'친절한, 다정한',hint:'',cat:'listen'},
+  {en:'join',ko:'가입하다',hint:'= sign up ↔ leave, quit',cat:'listen'},
+  {en:'outside',ko:'밖에서, 밖에',hint:'↔ inside',cat:'listen'},
+  {en:'still',ko:'여전히, 아직도',hint:'',cat:'listen'},
+  {en:'volunteer',ko:'자원봉사자 / 자원봉사 하다',hint:'',cat:'listen'},
+  {en:'be good at',ko:'~을 잘하다, ~에 능숙하다',hint:'',cat:'listen'},
+  {en:'be into',ko:'~에 관심이 많다, ~을 좋아하다',hint:'',cat:'listen'},
+  {en:'free time',ko:'자유 시간, 여가 시간',hint:'',cat:'listen'},
+  {en:'look for',ko:'~을 찾다',hint:'',cat:'listen'},
+  {en:'table tennis',ko:'탁구',hint:'= ping-pong',cat:'listen'},
+  {en:'Why don\'t we ~?',ko:'우리 ~하는 게 어때?',hint:'제안 표현',cat:'listen'},
+  {en:'advice',ko:'충고, 조언',hint:'advise 충고하다',cat:'reading'},
+  {en:'always',ko:'항상, 늘',hint:'',cat:'reading'},
+  {en:'beehive',ko:'벌집',hint:'',cat:'reading'},
+  {en:'brave',ko:'용감한',hint:'= courageous ↔ cowardly',cat:'reading'},
+  {en:'character',ko:'캐릭터, 등장인물; 성격',hint:'',cat:'reading'},
+  {en:'courage',ko:'용기',hint:'',cat:'reading'},
+  {en:'fail',ko:'실패하다',hint:'↔ succeed',cat:'reading'},
+  {en:'feeling',ko:'감정',hint:'= emotion',cat:'reading'},
+  {en:'follow',ko:'~을 이해하다; ~을 따라가다',hint:'',cat:'reading'},
+  {en:'gather',ko:'모으다; 모이다',hint:'',cat:'reading'},
+  {en:'get',ko:'얻다',hint:'got - gotten/got',cat:'reading'},
+  {en:'happen',ko:'일어나다, 발생하다',hint:'= take place',cat:'reading'},
+  {en:'helpful',ko:'도움이 되는',hint:'',cat:'reading'},
+  {en:'hold',ko:'잡고 있다, 쥐다',hint:'held - held',cat:'reading'},
+  {en:'honey',ko:'꿀',hint:'',cat:'reading'},
+  {en:'hopeful',ko:'희망에 찬',hint:'↔ hopeless',cat:'reading'},
+  {en:'knowledge',ko:'지식',hint:'',cat:'reading'},
+  {en:'laugh',ko:'웃다; 웃음',hint:'동사·명사 동형',cat:'reading'},
+  {en:'look',ko:'표정; 보기 / ~해 보이다; 보다',hint:'',cat:'reading'},
+  {en:'luckily',ko:'다행히도',hint:'= fortunately',cat:'reading'},
+  {en:'pop',ko:'펑 하고 터뜨리다[터지다]',hint:'= burst',cat:'reading'},
+  {en:'scared',ko:'무서워하는, 겁먹은',hint:'= afraid, frightened',cat:'reading'},
+  {en:'stormy',ko:'폭풍우가 몰아치는',hint:'',cat:'reading'},
+  {en:'storybook',ko:'동화책, 이야기책',hint:'',cat:'reading'},
+  {en:'thoughtful',ko:'사려 깊은, 신중한',hint:'↔ thoughtless',cat:'reading'},
+  {en:'tie',ko:'묶다',hint:'tied - tied',cat:'reading'},
+  {en:'tightly',ko:'단단히, 꽉',hint:'↔ loosely',cat:'reading'},
+  {en:'way',ko:'방법, 방식; 길',hint:'',cat:'reading'},
+  {en:'woods',ko:'숲',hint:'= forest',cat:'reading'},
+  {en:'be proud of',ko:'~을 자랑스러워 하다',hint:'',cat:'reading'},
+  {en:'be ready to',ko:'~할 준비가 되어 있다',hint:'',cat:'reading'},
+  {en:'care for',ko:'~을 보살피다, 돌보다',hint:'= take care of',cat:'reading'},
+  {en:'each other',ko:'서로',hint:'',cat:'reading'},
+  {en:'give advice',ko:'충고를 하다',hint:'',cat:'reading'},
+  {en:'hear about',ko:'~에 대해 듣다',hint:'',cat:'reading'},
+  {en:'look at',ko:'~을 보다',hint:'',cat:'reading'},
+  {en:'main character',ko:'주인공',hint:'',cat:'reading'},
+  {en:'take a look',ko:'살펴보다',hint:'',cat:'reading'},
+  {en:'think of',ko:'~을 생각해 내다, 고안하다',hint:'',cat:'reading'},
+  {en:'try to',ko:'~하려고 노력하다',hint:'to 뒤 동사원형',cat:'reading'},
+  {en:'alone',ko:'혼자의',hint:'',cat:'lang'},
+  {en:'aquarium',ko:'수족관',hint:'',cat:'lang'},
+  {en:'brains',ko:'지능',hint:'= intelligence',cat:'lang'},
+  {en:'calm',ko:'침착한, 차분한',hint:'',cat:'lang'},
+  {en:'curly',ko:'곱슬곱슬한',hint:'',cat:'lang'},
+  {en:'funny',ko:'재미있는, 웃기는',hint:'',cat:'lang'},
+  {en:'instead',ko:'대신에',hint:'',cat:'lang'},
+  {en:'introduce',ko:'소개하다',hint:'',cat:'lang'},
+  {en:'jar',ko:'항아리, 단지',hint:'',cat:'lang'},
+  {en:'joke',ko:'농담',hint:'',cat:'lang'},
+  {en:'mud',ko:'진흙',hint:'',cat:'lang'},
+  {en:'outgoing',ko:'외향적인, 사교적인',hint:'↔ shy',cat:'lang'},
+  {en:'powerful',ko:'강한',hint:'power 힘',cat:'lang'},
+  {en:'real',ko:'진정한, 진짜의',hint:'',cat:'lang'},
+  {en:'relaxed',ko:'느긋한, 여유 있는',hint:'relax 휴식을 취하다',cat:'lang'},
+  {en:'after school',ko:'방과 후에',hint:'',cat:'lang'},
+  {en:'fill A with B',ko:'A를 B로 채우다',hint:'',cat:'lang'},
+  {en:'key ring',ko:'열쇠고리',hint:'',cat:'lang'},
+];
+
+const ENG_DEFS = [
+  {word:'balloon',def:'a round thing filled with air or gas',ko:'풍선'},
+  {word:'brave',def:'not afraid to do something dangerous or difficult',ko:'용감한'},
+  {word:'character',def:'a person in a story, play, or movie; someone\'s nature',ko:'캐릭터, 등장인물; 성격'},
+  {word:'cheerful',def:'happy and smiling a lot',ko:'쾌활한, 발랄한'},
+  {word:'creative',def:'good at making new and fun ideas',ko:'창의적인'},
+  {word:'feeling',def:'something you feel inside, like happiness or sadness',ko:'감정'},
+  {word:'follow',def:'to understand the meaning or logic of something',ko:'~을 이해하다'},
+  {word:'gather',def:'to bring people or things together in one place',ko:'모으다'},
+  {word:'get',def:'to receive or take something',ko:'얻다'},
+  {word:'helpful',def:'giving help; making something easier',ko:'도움이 되는'},
+  {word:'hold',def:'to keep something in your hand',ko:'잡고 있다, 쥐다'},
+  {word:'honey',def:'sweet food made by bees from flowers',ko:'꿀'},
+  {word:'hopeful',def:'feeling that good things will happen',ko:'희망에 찬'},
+  {word:'knowledge',def:'information and understanding you get from learning',ko:'지식'},
+  {word:'rope',def:'a strong, thick line used to tie or pull things',ko:'밧줄'},
+  {word:'stormy',def:'with strong wind, heavy rain, or thunder',ko:'폭풍우가 몰아치는'},
+  {word:'tie',def:'to hold things together with rope or a thin line',ko:'묶다'},
+  {word:'tightly',def:'in a way that is very close, not loose',ko:'단단히, 꽉'},
+  {word:'woods',def:'a place with many trees growing close together',ko:'숲'},
+  {word:'main character',def:'the most important person in a story or movie',ko:'주인공'},
+];
+
+const READING_SENTENCES = [
+  {en:"Hello! I'm Christopher Robin from the storybook, Winnie-the-Pooh.",ko:"안녕! 나는 동화책 <곰돌이 푸>에 나오는 Christopher Robin이야."},
+  {en:"I'm a thoughtful character in the stories, and I'm kind to my friends.",ko:"나는 이야기 속에서 사려 깊은 캐릭터이고, 내 친구들에게 친절해."},
+  {en:"Now I'm looking at some old pictures of them.",ko:"지금 나는 내 친구들의 옛날 사진 몇 장을 보고 있어."},
+  {en:"They are the happiest animals in the woods.",ko:"그들은 숲에서 가장 행복한 동물들이야."},
+  {en:"Would you like to take a look and hear about them?",ko:"사진을 살펴보면서 그들에 대해 들어 볼래?"},
+  {en:"This is Pooh and me.",ko:"이것은 Pooh와 나야."},
+  {en:"Pooh loves all kinds of food, but he likes honey the best.",ko:"Pooh는 모든 종류의 음식을 정말 좋아하지만, 꿀을 가장 좋아해."},
+  {en:"In this picture, he is holding a big balloon and trying to get honey from a beehive.",ko:"이 사진에서 그는 커다란 풍선을 잡고 있고 벌집에서 꿀을 꺼내려고 하고 있어."},
+  {en:"What happened next?",ko:"그다음에는 무슨 일이 일어났을까?"},
+  {en:"The bees popped his balloon, so he couldn't get the honey.",ko:"벌들이 그의 풍선을 터뜨려서 그는 꿀을 얻을 수 없었어."},
+  {en:"He failed, but he was cheerful and hopeful.",ko:"그는 실패했지만, 쾌활하고 희망에 차 있었어."},
+  {en:"He is always thinking of creative ways to get honey.",ko:"그는 항상 꿀을 얻을 창의적인 방법들에 대해 생각하고 있어."},
+  {en:"This is a picture of a stormy day in the woods.",ko:"이것은 숲에 폭풍우가 몰아치던 날의 사진이야."},
+  {en:"The strong wind almost broke the door, so my friends had to hold it.",ko:"강한 바람이 문을 거의 부술 뻔해서, 내 친구들이 문을 꼭 잡고 있어야 했어."},
+  {en:"Luckily, there was a rope to help.",ko:"다행히도, 도움이 될 밧줄이 하나 있었어."},
+  {en:"Pooh and Rabbit couldn't move, but small, scared Piglet could.",ko:"Pooh와 Rabbit은 움직일 수 없었지만, 작고 겁먹은 Piglet은 움직일 수 있었어."},
+  {en:'They said to Piglet, "Tie the door, please!"',ko:'그들은 Piglet에게 "문 좀 묶어 줘!"라고 말했어.'},
+  {en:"He gathered his courage and tied it tightly.",ko:"그는 용기를 내어 문을 단단히 묶었어."},
+  {en:"Piglet is shy and easily scared.",ko:"Piglet은 수줍음이 많고 쉽게 겁을 먹어."},
+  {en:"But he becomes brave when his friends need him.",ko:"하지만 그는 친구들이 그를 필요로 할 때 용감해져."},
+  {en:"My friend in the last picture is Owl.",ko:"마지막 사진 속의 내 친구는 Owl이야."},
+  {en:"Owl believes he is the smartest animal in the woods.",ko:"Owl은 자신이 숲에서 가장 똑똑한 동물이라고 믿어."},
+  {en:"He is proud of his knowledge.",ko:"그는 자신의 지식을 자랑스러워해."},
+  {en:"In this picture, Owl is telling us a long story, and we are listening.",ko:"이 사진에서 Owl은 우리에게 긴 이야기를 하고 있고, 우리는 듣고 있어."},
+  {en:"Do you see the look on our faces?",ko:"우리 얼굴의 표정이 보이니?"},
+  {en:"You're right! We're not really following his story.",ko:"네 말이 맞아! 우리는 그의 이야기를 잘 따라가고 있지 않아."},
+  {en:"He talks a lot, and sometimes his stories are hard to understand.",ko:"그는 말을 많이 하고, 가끔 그의 이야기는 이해하기에 어려워."},
+  {en:"But he loves giving us advice, and it's often helpful.",ko:"하지만 그는 우리에게 조언해 주는 것을 좋아하고, 그 조언은 종종 도움이 돼."},
+  {en:"Owl is always ready to help.",ko:"Owl은 항상 도울 준비가 되어 있어."},
+  {en:"We're all different, but we're good friends.",ko:"우리는 모두 달라, 하지만 우리는 좋은 친구들이야."},
+  {en:"We love each other.",ko:"우리는 서로를 사랑해."},
+];
+
+const DIALOGUES = [
+  {
+    id:'A1', title:'Listen & Speak A-1',
+    lines:[
+      {s:'G',t:"Let's join the table tennis club, Sehun."},
+      {s:'B',t:"Hmm, I'm not into table tennis."},
+      {s:'G',t:"Which club do you want to join?"},
+      {s:'B',t:"I'm going to join the soccer club. I enjoy exercising outside."},
+    ],
+    tf:[
+      {q:'Sehun is going to join the table tennis club.',a:false,e:'Sehun은 축구 동아리에 가입할 예정이다.'},
+      {q:"The girl wants to join the soccer club.",a:false,e:'소녀가 가입하고 싶은 것은 탁구 동아리이다.'},
+      {q:"Sehun enjoys exercising outside.",a:true,e:'Sehun은 밖에서 운동하는 것을 즐긴다.'},
+    ],
+    mc:[
+      {q:'What club will Sehun join?',choices:['table tennis club','soccer club','art club','coding club'],a:1},
+      {q:"Which expression shows what Sehun likes to do?",choices:["I'm not into table tennis.","I enjoy exercising outside.","Let's join together.","Which club do you want?"],a:1},
+    ],
+    blanks:[
+      {q:"I'm not ___ table tennis.",a:"into",choices:["into","from","about","with"]},
+      {q:"I ___ exercising outside.",a:"enjoy",choices:["enjoy","like playing","am","want"]},
+      {q:"Which club do you want to ___?",a:"join",choices:["join","enter","go","start"]},
+    ]
+  },
+  {
+    id:'A2', title:'Listen & Speak A-2',
+    lines:[
+      {s:'B',t:"My friend Amy wants to join your club, the school band."},
+      {s:'G',t:"Really? What does she play?"},
+      {s:'B',t:"She is really good at playing the drums."},
+      {s:'G',t:"What is she like? Is she active?"},
+      {s:'B',t:"Yes, she is active and friendly."},
+    ],
+    tf:[
+      {q:"Amy is good at playing the drums.",a:true,e:"Amy는 드럼을 정말 잘 친다."},
+      {q:"Amy wants to join the soccer club.",a:false,e:"Amy는 학교 밴드부에 들어가고 싶어 한다."},
+      {q:"Amy is shy and quiet.",a:false,e:"Amy는 활동적이고 다정하다."},
+    ],
+    mc:[
+      {q:"What is Amy like?",choices:["shy and quiet","active and friendly","funny and outgoing","calm and creative"],a:1},
+      {q:"What does Amy play?",choices:["piano","violin","drums","guitar"],a:2},
+    ],
+    blanks:[
+      {q:"She is really good ___ playing the drums.",a:"at",choices:["at","in","on","with"]},
+      {q:"What ___ she like?",a:"is",choices:["is","are","does","do"]},
+      {q:"She is active and ___.",a:"friendly",choices:["friendly","funny","calm","shy"]},
+    ]
+  },
+  {
+    id:'A3', title:'Listen & Speak A-3',
+    lines:[
+      {s:'B',t:"Look! Our school has a new club, the coding club."},
+      {s:'G',t:"That sounds cool. Do you want to join?"},
+      {s:'B',t:"Yes, I enjoy learning programming."},
+      {s:'G',t:"Oh, me too! Why don't we join the club together, Jake?"},
+      {s:'B',t:"That sounds good!"},
+    ],
+    tf:[
+      {q:"Jake is not interested in the coding club.",a:false,e:"Jake는 프로그래밍 배우는 것을 좋아한다."},
+      {q:"The girl also wants to join the coding club.",a:true,e:'소녀는 "me too"라며 함께 가입하자고 제안했다.'},
+      {q:"Jake suggests joining the club together.",a:false,e:'소녀가 "Why don\'t we join together?"라고 제안했다.'},
+    ],
+    mc:[
+      {q:"What does Jake enjoy?",choices:["playing soccer","learning programming","painting pictures","playing the drums"],a:1},
+      {q:'What does "Why don\'t we ~?" express?',choices:["question","command","suggestion","refusal"],a:2},
+    ],
+    blanks:[
+      {q:"I enjoy ___ programming.",a:"learning",choices:["learning","to learn","learn","learned"]},
+      {q:"Why don't ___ join the club together?",a:"we",choices:["we","I","you","they"]},
+      {q:"That ___ cool.",a:"sounds",choices:["sounds","looks","seems","feels"]},
+    ]
+  },
+  {
+    id:'A4', title:'Listen & Speak A-4',
+    lines:[
+      {s:'B',t:"Haein, what club are you going to join?"},
+      {s:'G',t:"Well, I'm still thinking about it."},
+      {s:'B',t:"How about the art club? It sounds perfect for you."},
+      {s:'G',t:"Really? Why do you think so?"},
+      {s:'B',t:"You like painting, and you're creative."},
+      {s:'G',t:"Hmm, that club looks interesting."},
+    ],
+    tf:[
+      {q:"Haein has already decided which club to join.",a:false,e:"해인은 아직 생각 중이라고 했다 (still thinking)."},
+      {q:"The boy recommends the coding club.",a:false,e:"소년은 미술 동아리를 추천했다."},
+      {q:"Haein likes painting.",a:true,e:"소년은 해인이 그림 그리는 것을 좋아한다고 했다."},
+    ],
+    mc:[
+      {q:"Which club does the boy recommend?",choices:["coding club","music club","art club","soccer club"],a:2},
+      {q:"What is Haein like?",choices:["calm and relaxed","active and friendly","creative and good at painting","shy and curious"],a:2},
+    ],
+    blanks:[
+      {q:"I'm ___ thinking about it.",a:"still",choices:["still","always","never","often"]},
+      {q:"How about the art ___?",a:"club",choices:["club","team","class","group"]},
+      {q:"You're ___.",a:"creative",choices:["creative","brave","calm","outgoing"]},
+    ]
+  },
+];
+
+// ═══════════════════════════════════════
+// BUILT-IN QUESTION BANKS
+// ═══════════════════════════════════════
+const QUESTIONS_DB = {
+  'vocab-enkor': {
+    basic: generateVocabEnKor('basic'),
+    advanced: generateVocabEnKor('advanced'),
+    expert: generateVocabEnKor('expert'),
+  },
+  'vocab-koren': {
+    basic: generateVocabKorEn('basic'),
+    advanced: generateVocabKorEn('advanced'),
+    expert: generateVocabKorEn('expert'),
+  },
+  'vocab-def': {
+    basic: generateEngDefQ(),
+    advanced: generateEngDefQ(),
+    expert: generateEngDefQ(),
+  },
+  'dialogue-tf': {
+    basic: generateDialogueTF(),
+    advanced: generateDialogueTF(),
+    expert: generateDialogueTF(),
+  },
+  'dialogue-mc': {
+    basic: generateDialogueMC(),
+    advanced: generateDialogueMC(),
+    expert: generateDialogueMC(),
+  },
+  'dialogue-fill': {
+    basic: generateDialogueFill('basic'),
+    advanced: generateDialogueFill('advanced'),
+    expert: generateDialogueFill('expert'),
+  },
+  'dialogue-order': {
+    basic: generateDialogueOrder(),
+    advanced: generateDialogueOrder(),
+    expert: generateDialogueOrder(),
+  },
+  'reading-tf': {
+    basic: generateReadingTF(),
+    advanced: generateReadingTF(),
+    expert: generateReadingTF(),
+  },
+  'reading-mc': {
+    basic: generateReadingMC(),
+    advanced: generateReadingMC(),
+    expert: generateReadingMC(),
+  },
+  'grammar-super': {
+    basic: generateGrammarSuper('basic'),
+    advanced: generateGrammarSuper('advanced'),
+    expert: generateGrammarSuper('expert'),
+  },
+  'grammar-toinf': {
+    basic: generateGrammarToInf('basic'),
+    advanced: generateGrammarToInf('advanced'),
+    expert: generateGrammarToInf('expert'),
+  },
+};
+
+function generateVocabEnKor(diff){
+  const pool = diff==='basic' ? VOCAB.filter(v=>v.cat==='listen') :
+               diff==='advanced' ? VOCAB.filter(v=>v.cat==='reading') : VOCAB;
+  return pool.map((item,i)=>{
+    const wrongs = shuffle(VOCAB.filter(v=>v.ko!==item.ko)).slice(0,3).map(v=>v.ko);
+    return {
+      id:`enkor-${i}`,type:'mc',
+      q:`"${item.en}"의 뜻은?`,
+      sub: item.hint||'',
+      choices:shuffle([item.ko,...wrongs]),
+      answer:item.ko,
+      explain:`${item.en} = ${item.ko}${item.hint?' ('+item.hint+')':''}`
+    };
+  });
+}
+
+function generateVocabKorEn(diff){
+  const pool = diff==='basic' ? VOCAB.filter(v=>v.cat==='listen') :
+               diff==='advanced' ? VOCAB.filter(v=>v.cat==='reading') : VOCAB;
+  return pool.map((item,i)=>{
+    const wrongs = shuffle(VOCAB.filter(v=>v.en!==item.en)).slice(0,3).map(v=>v.en);
+    return {
+      id:`koren-${i}`,type:'mc',
+      q:`"${item.ko}"를 영어로 쓰면?`,
+      choices:shuffle([item.en,...wrongs]),
+      answer:item.en,
+      explain:`${item.ko} = ${item.en}`
+    };
+  });
+}
+
+function generateEngDefQ(){
+  return ENG_DEFS.map((item,i)=>{
+    const wrongs = shuffle(ENG_DEFS.filter(v=>v.word!==item.word)).slice(0,3).map(v=>v.word);
+    return {
+      id:`def-${i}`,type:'mc',
+      q:item.def,
+      sub:'위 영어 설명에 해당하는 단어는?',
+      choices:shuffle([item.word,...wrongs]),
+      answer:item.word,
+      explain:`${item.word}(${item.ko}): ${item.def}`
+    };
+  });
+}
+
+function generateDialogueTF(){
+  const qs = [];
+  DIALOGUES.forEach(d=>{
+    d.tf.forEach((q,i)=>{
+      qs.push({
+        id:`dtf-${d.id}-${i}`,type:'tf',
+        context:`[${d.title}]\n${d.lines.map(l=>l.s+': '+l.t).join('\n')}`,
+        q:q.q,answer:q.a,explain:q.e
+      });
+    });
+  });
+  return qs;
+}
+
+function generateDialogueMC(){
+  const qs = [];
+  DIALOGUES.forEach(d=>{
+    d.mc.forEach((q,i)=>{
+      qs.push({
+        id:`dmc-${d.id}-${i}`,type:'mc',
+        context:`[${d.title}]`,
+        q:q.q,choices:q.choices,answer:q.choices[q.a],
+        explain:`정답: ${q.choices[q.a]}`
+      });
+    });
+  });
+  return qs;
+}
+
+function generateDialogueFill(diff){
+  const qs = [];
+  DIALOGUES.forEach(d=>{
+    d.blanks.forEach((q,i)=>{
+      if(diff==='basic'||true){
+        qs.push({
+          id:`dfill-${d.id}-${i}`,type:'mc',
+          q:q.q,choices:q.choices,answer:q.a,
+          sub:`[${d.title}] 빈칸에 알맞은 말은?`,
+          explain:`정답: "${q.a}"`
+        });
+      }
+    });
+  });
+  return qs;
+}
+
+function generateDialogueOrder(){
+  return DIALOGUES.map(d=>({
+    id:`dord-${d.id}`,type:'order',
+    q:`[${d.title}] 다음 대화를 올바른 순서로 배열하시오.`,
+    items:d.lines.map(l=>l.s+': '+l.t),
+    answer:d.lines.map(l=>l.s+': '+l.t),
+    explain:'순서대로 배열: '+d.lines.map((l,i)=>String.fromCharCode(9312+i)).join('→')
+  }));
+}
+
+function generateReadingTF(){
+  return [
+    {id:'rtf-1',type:'tf',q:"Christopher Robin is a character from the storybook Winnie-the-Pooh.",a:true,e:"Christopher Robin은 동화책 <곰돌이 푸>의 등장인물이다."},
+    {id:'rtf-2',type:'tf',q:"Pooh likes all kinds of food equally.",a:false,e:"Pooh는 꿀을 가장 좋아한다 (likes honey the best)."},
+    {id:'rtf-3',type:'tf',q:"Pooh successfully got honey from the beehive.",a:false,e:"벌들이 풍선을 터뜨려서 꿀을 얻지 못했다."},
+    {id:'rtf-4',type:'tf',q:"Pooh was sad and gave up after failing.",a:false,e:"실패했지만 쾌활하고 희망에 차 있었다 (cheerful and hopeful)."},
+    {id:'rtf-5',type:'tf',q:"Piglet was the only one who could move during the storm.",a:true,e:"Pooh와 Rabbit은 움직일 수 없었지만, Piglet은 움직일 수 있었다."},
+    {id:'rtf-6',type:'tf',q:"Piglet tied the door with a rope.",a:true,e:"Piglet은 용기를 내어 문을 단단히 묶었다."},
+    {id:'rtf-7',type:'tf',q:"Piglet is brave all the time.",a:false,e:"Piglet은 평소에 수줍고 쉽게 겁을 먹지만, 친구들이 필요할 때 용감해진다."},
+    {id:'rtf-8',type:'tf',q:"Owl believes he is the smartest animal in the woods.",a:true,e:"Owl은 자신이 숲에서 가장 똑똑하다고 믿는다."},
+    {id:'rtf-9',type:'tf',q:"The narrator and friends fully follow Owl's stories.",a:false,e:"그들은 Owl의 이야기를 잘 따라가지 못하고 있다."},
+    {id:'rtf-10',type:'tf',q:"All the friends are exactly the same.",a:false,e:"모두 다르지만 좋은 친구들이다 (We're all different, but we're good friends)."},
+    {id:'rtf-11',type:'tf',q:"Owl's advice is often helpful.",a:true,e:"Owl의 조언은 종종 도움이 된다 (it's often helpful)."},
+    {id:'rtf-12',type:'tf',q:"Christopher Robin thinks of himself as a unkind character.",a:false,e:"Christopher Robin은 사려 깊고 친절하다 (thoughtful, kind)."},
+  ];
+}
+
+function generateReadingMC(){
+  return [
+    {id:'rmc-1',type:'mc',q:"What is Pooh's favorite food?",choices:["fruits","vegetables","honey","bread"],answer:"honey",explain:"Pooh likes honey the best."},
+    {id:'rmc-2',type:'mc',q:"Why couldn't Pooh get the honey?",choices:["He was too small.","The bees popped his balloon.","There was no honey.","He forgot to bring a rope."],answer:"The bees popped his balloon.",explain:"The bees popped his balloon, so he couldn't get the honey."},
+    {id:'rmc-3',type:'mc',q:"How does Pooh feel after failing?",choices:["angry and upset","sad and hopeless","cheerful and hopeful","calm and quiet"],answer:"cheerful and hopeful",explain:"He failed, but he was cheerful and hopeful."},
+    {id:'rmc-4',type:'mc',q:"What did Piglet do during the storm?",choices:["He ran away.","He gathered honey.","He tied the door tightly.","He called for help."],answer:"He tied the door tightly.",explain:"He gathered his courage and tied it tightly."},
+    {id:'rmc-5',type:'mc',q:"What is Piglet like in general?",choices:["brave and outgoing","shy and easily scared","funny and creative","calm and relaxed"],answer:"shy and easily scared",explain:"Piglet is shy and easily scared."},
+    {id:'rmc-6',type:'mc',q:"What does Owl believe about himself?",choices:["He is the bravest.","He is the happiest.","He is the smartest.","He is the funniest."],answer:"He is the smartest.",explain:"Owl believes he is the smartest animal in the woods."},
+    {id:'rmc-7',type:'mc',q:"What is the main message of the reading?",choices:["Honesty is important.","It's good to be smart.","Different friends can be good friends.","Only brave animals matter."],answer:"Different friends can be good friends.",explain:"We're all different, but we're good friends."},
+    {id:'rmc-8',type:'mc',q:"What does 'follow' mean in 'We're not really following his story'?",choices:["walk behind","understand","copy","agree"],answer:"understand",explain:"follow = ~을 이해하다 (to understand the meaning or logic)"},
+  ];
+}
+
+function generateGrammarSuper(diff){
+  const basic = [
+    {id:'gs-b1',type:'mc',q:"They are the ___ animals in the woods.",choices:["happy","happier","happiest","most happy"],answer:"happiest",explain:"happy의 최상급: y→i + est = happiest"},
+    {id:'gs-b2',type:'mc',q:"August is the ___ month of the year.",choices:["hot","hotter","hotest","hottest"],answer:"hottest",explain:"hot의 최상급: 단모음+단자음 → 자음 2번 + est = hottest"},
+    {id:'gs-b3',type:'mc',q:"That island is the ___ in the world.",choices:["beautifullest","most beautiful","beautiful","more beautiful"],answer:"most beautiful",explain:"beautiful(-ful): most + 원급 = most beautiful"},
+    {id:'gs-b4',type:'mc',q:"Jenny is the ___ singer in the contest.",choices:["good","better","best","most good"],answer:"best",explain:"good의 최상급은 불규칙: best"},
+    {id:'gs-b5',type:'mc',q:"Sandy is the ___ girl in her class.",choices:["kind","kinder","kindest","most kind"],answer:"kindest",explain:"kind의 최상급: kind + est = kindest"},
+    {id:'gs-b6',type:'mc',q:"This puzzle is the ___ of all.",choices:["hard","harder","hardest","most hard"],answer:"hardest",explain:"hard의 최상급: hard + est = hardest"},
+    {id:'gs-b7',type:'mc',q:"She is the ___ girl at the party.",choices:["prettiest","prettyest","most pretty","prettier"],answer:"prettiest",explain:"pretty(y→i+est) = prettiest"},
+    {id:'gs-b8',type:'mc',q:"That building is the ___ in town.",choices:["biggest","bigest","most big","bigger"],answer:"biggest",explain:"big(단모음+단자음): g 2번 + est = biggest"},
+  ];
+  const advanced = [
+    {id:'gs-a1',type:'mc',q:"This movie is the ___ of all. (interesting)",choices:["interestingest","most interestingest","most interesting","more interesting"],answer:"most interesting",explain:"-ing 끝 → most + 원급: most interesting"},
+    {id:'gs-a2',type:'mc',q:"어법상 틀린 것은? Ted is the tallest student [in / of] my class.",choices:["in","of","both OK","neither OK"],answer:"in",explain:"장소(집단) + in: in my class"},
+    {id:'gs-a3',type:'mc',q:"가장 최상급이 잘못 짝지어진 것은?",choices:["fast-fastest","big-biggest","bad-worst","good-goodest"],answer:"good-goodest",explain:"good의 불규칙 최상급: best"},
+    {id:'gs-a4',type:'fill',q:"'나의 엄마는 우리 가족에서 가장 바쁜 분이다.' → My mom is the ___ person in my family.",answer:"busiest",explain:"busy(y→i+est) = busiest",hint:"busy의 최상급"},
+    {id:'gs-a5',type:'fill',q:"'이것은 세 개 중 가장 흥미진진한 책이다.' → This book is the most exciting ___ the three.",answer:"of",explain:"복수명사/기간 앞에는 of: of the three"},
+  ];
+  const expert = [
+    {id:'gs-e1',type:'mc',q:"다음 중 어법상 옳은 문장은?",choices:["He is the most strong boy in class.","This is the easyest question.","She is the kindest girl in town.","Math is the difficultest subject."],answer:"She is the kindest girl in town.",explain:"kind + est = kindest (단음절 형용사)"},
+    {id:'gs-e2',type:'fill',q:"'그는 이야기하기에 가장 좋은 친구이다.' → He is the ___ friend to talk with.",answer:"best",explain:"good의 최상급 불규칙: best",hint:"good의 최상급"},
+    {id:'gs-e3',type:'mc',q:"They are the happiest animals in the woods. 와 같은 의미는?",choices:["They are happier than animals.","They are happy in the woods.","They are happier than any other animals in the woods.","They are not as happy as other animals."],answer:"They are happier than any other animals in the woods.",explain:"최상급 = 비교급 + than any other + 단수명사"},
+    {id:'gs-e4',type:'fill',q:"'Tom은 우리 반에서 가장 키가 크다.' → Tom is the ___ ___ in our class.",answer:"tallest student",explain:"the + tallest + 명사 + in + 장소",hint:"최상급 문장 완성"},
+    {id:'gs-e5',type:'mc',q:"다음 최상급 중 형태가 틀린 것은?",choices:["closest","largest","hotest","most creative"],answer:"hotest",explain:"hot: 단모음+단자음 → t를 한 번 더 쓰고 est → hottest"},
+  ];
+  return diff==='basic'?basic:diff==='advanced'?advanced:expert;
+}
+
+function generateGrammarToInf(diff){
+  const basic = [
+    {id:'gt-b1',type:'mc',q:"I need something ___ now.",choices:["eat","to eat","eating","to eating"],answer:"to eat",explain:"something + to부정사: something to eat (먹을 것)"},
+    {id:'gt-b2',type:'mc',q:"We have a lot of homework ___.",choices:["do","doing","to do","to doing"],answer:"to do",explain:"homework(명사) + to do: 할 숙제"},
+    {id:'gt-b3',type:'mc',q:"She bought a pen ___ with.",choices:["write","writing","to write","wrote"],answer:"to write",explain:"write with a pen → a pen to write with (쓸 펜)"},
+    {id:'gt-b4',type:'mc',q:"There was a rope ___.",choices:["help","helped","to help","helping"],answer:"to help",explain:"a rope to help: 도움이 될 밧줄 (형용사적 용법)"},
+    {id:'gt-b5',type:'mc',q:"There was a bench ___ on in the park.",choices:["sit","to sit","sitting","sat"],answer:"to sit",explain:"a bench to sit on: 앉을 벤치 (전치사 on 포함)"},
+    {id:'gt-b6',type:'mc',q:"Did you find anyone ___ you?",choices:["to help","helping","help","to helping"],answer:"to help",explain:"anyone to help you: 너를 도와줄 사람"},
+    {id:'gt-b7',type:'mc',q:"I didn't have a chance ___ to Jina.",choices:["talk","to talk","talking","talked"],answer:"to talk",explain:"a chance to talk: 이야기할 기회"},
+    {id:'gt-b8',type:'mc',q:"She wants something cold ___.",choices:["drink","to drink","drinking","to drinking"],answer:"to drink",explain:"something cold to drink: 마실 차가운 것 (-thing+형용사+to부정사)"},
+  ];
+  const advanced = [
+    {id:'gt-a1',type:'mc',q:"어법상 틀린 것은? Mary is looking for a pencil [to write / to write with].",choices:["to write","to write with","both OK","neither OK"],answer:"to write with",explain:"write with a pencil → 전치사 with 필요: to write with"},
+    {id:'gt-a2',type:'fill',q:"'나는 앉을 의자가 필요하다.' → I need a chair ___ ___.",answer:"to sit on",explain:"sit on a chair → a chair to sit on",hint:"전치사 포함"},
+    {id:'gt-a3',type:'mc',q:"다음 중 to부정사의 형용사적 용법이 쓰인 문장은?",choices:["She went to the library to study.","My hobby is to play guitar.","I need crayons to draw with.","She likes to sing songs."],answer:"I need crayons to draw with.",explain:"crayons to draw with: 앞의 명사 crayons를 수식 → 형용사적 용법"},
+    {id:'gt-a4',type:'mc',q:"밑줄 친 to부정사의 쓰임이 나머지와 다른 것은?",choices:["I don't have a book to read.","She turned on the radio to listen to music.","There is no water to drink.","I didn't have a chance to talk to her."],answer:"She turned on the radio to listen to music.",explain:"to listen to music: 목적(음악을 듣기 위해) = 부사적 용법. 나머지는 형용사적 용법."},
+    {id:'gt-a5',type:'fill',q:"'그녀는 입을 드레스를 찾고 있다.' → She is looking for a dress ___.",answer:"to wear",explain:"a dress to wear: 입을 드레스 (형용사적 용법)",hint:"동사원형을 써서"},
+  ];
+  const expert = [
+    {id:'gt-e1',type:'mc',q:"I need someone wise ___. 빈칸에 알맞은 것은?",choices:["lead me","to lead me","leading me","to leading me"],answer:"to lead me",explain:"-one + 형용사(wise) + to부정사: someone wise to lead me"},
+    {id:'gt-e2',type:'fill',q:"두 문장을 한 문장으로: He found a movie. He can watch it. → He found a movie ___.",answer:"to watch",explain:"a movie to watch: 볼 영화",hint:"to + 동사원형"},
+    {id:'gt-e3',type:'mc',q:"다음 중 어법상 옳은 문장은?",choices:["I found someone help me.","Give me something cold drink.","I have a lot of work doing today.","He found a book to read."],answer:"He found a book to read.",explain:"a book to read: 형용사적 용법 올바른 사용"},
+    {id:'gt-e4',type:'mc',q:"'나는 너를 도와줄 누군가가 필요하다.' 영작 중 올바른 것은?",choices:["I need someone help me.","I need someone to help me.","I need to someone help me.","I need someone helping me."],answer:"I need someone to help me.",explain:"someone + to부정사: someone to help me"},
+    {id:'gt-e5',type:'mc',q:"어법상 틀린 것을 고르시오.",choices:["Tom is the fastest runner in school.","I have something to tell you.","It is the longest river in the world.","He found a chair to sit."],answer:"He found a chair to sit.",explain:"sit on a chair → a chair to sit on (전치사 on 필요)"},
+  ];
+  return diff==='basic'?basic:diff==='advanced'?advanced:expert;
+}
+
+// ═══════════════════════════════════════
+// STATE & STORAGE
+// ═══════════════════════════════════════
+let state = {
+  screen:'home', mode:null, submode:null, difficulty:null,
+  questions:[], currentQ:0, score:0, correct:0, wrong:0,
+  startTime:0, wrongItems:[], prevMode:null,
+  fcIndex:0, fcItems:[],
+};
+
+const STORE_KEY = 'ybm2_l1_v2';
+let storage = loadStorage();
+
+function loadStorage(){
+  try{
+    const d = localStorage.getItem(STORE_KEY);
+    if(d) return JSON.parse(d);
+  }catch(e){}
+  return {stats:{total:0,correct:0}, usedIds:{}, progress:{}};
+}
+
+function saveStorage(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify(storage)); }catch(e){}
+}
+
+function markUsed(mode, diff, ids){
+  const k = mode+'_'+diff;
+  if(!storage.usedIds[k]) storage.usedIds[k]=[];
+  ids.forEach(id=>{ if(!storage.usedIds[k].includes(id)) storage.usedIds[k].push(id); });
+  saveStorage();
+}
+
+function getUnusedQuestions(pool, mode, diff, count=10){
+  const k = mode+'_'+diff;
+  const used = storage.usedIds[k]||[];
+  let unused = pool.filter(q=>!used.includes(q.id));
+  if(unused.length < count){
+    storage.usedIds[k]=[];
+    saveStorage();
+    unused = [...pool];
+  }
+  return shuffle(unused).slice(0, count);
+}
+
+function updateStats(correct, total){
+  storage.stats.total += total;
+  storage.stats.correct += correct;
+  saveStorage();
+  refreshHomeStats();
+}
+
+function refreshHomeStats(){
+  const {total,correct} = storage.stats;
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-correct').textContent = correct;
+  document.getElementById('stat-rate').textContent = total>0 ? Math.round(correct/total*100)+'%' : '—';
+}
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+const NAV_MAP = {
+  home:'screen-home', vocab:'screen-vocab',
+  grammar:'screen-grammar', dialogue:'screen-dialogue',
+  progress:'screen-progress',
+};
+
+function navTo(tab){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-'+tab)?.classList.add('active');
+  const screen = NAV_MAP[tab];
+  if(screen) showScreen(screen);
+  if(tab==='progress') renderProgress();
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('main').scrollTo(0,0);
+}
+
+function goHome(){
+  navTo('home');
+}
+
+// ═══════════════════════════════════════
+// MODE SELECTION
+// ═══════════════════════════════════════
+function selectMode(mode){
+  state.prevMode = mode;
+  if(mode==='comprehensive') { selectDifficulty('comprehensive'); return; }
+  if(mode==='reading') { showScreen('screen-reading'); document.getElementById('nav-vocab').classList.remove('active'); return; }
+  showScreen('screen-'+mode);
+}
+
+let _currentSubmode = null;
+function selectDifficulty(submode){
+  _currentSubmode = submode;
+  const labels = {
+    'vocab-enkor':'영→한 단어 퀴즈','vocab-koren':'한→영 단어 퀴즈',
+    'vocab-def':'영영풀이 퀴즈','vocab-ai':'AI 어휘 문제',
+    'grammar-super':'최상급 문제','grammar-toinf':'to부정사 형용사적 용법',
+    'grammar-ai':'AI 문법 문제',
+    'dialogue-tf':'일치/불일치 T/F','dialogue-mc':'내용 이해 객관식',
+    'dialogue-fill':'빈칸 완성','dialogue-order':'순서 배열',
+    'dialogue-ai':'AI 대화문 문제',
+    'reading-tf':'본문 내용 T/F','reading-mc':'독해 객관식',
+    'reading-ai':'AI 독해 문제',
+    'comprehensive':'통합 테스트',
+  };
+  document.getElementById('diff-title').textContent = labels[submode]||submode;
+  document.getElementById('diff-header').textContent = (labels[submode]||submode);
+  document.getElementById('diff-sub').textContent = '학습 난이도를 선택하세요';
+  showScreen('screen-difficulty');
+}
+
+function diffBack(){
+  // go back to appropriate mode screen
+  const sm = _currentSubmode||'';
+  if(sm.startsWith('vocab')) showScreen('screen-vocab');
+  else if(sm.startsWith('grammar')) showScreen('screen-grammar');
+  else if(sm.startsWith('dialogue')) showScreen('screen-dialogue');
+  else if(sm.startsWith('reading')) showScreen('screen-reading');
+  else goHome();
+}
+
+async function startQuiz(diff){
+  state.difficulty = diff;
+  state.submode = _currentSubmode;
+  state.mode = _currentSubmode;
+  
+  const isAI = _currentSubmode.endsWith('-ai') || _currentSubmode==='comprehensive';
+  
+  if(isAI){
+    showScreen('screen-loading');
+    document.getElementById('loading-sub').textContent = 'Claude AI가 맞춤 '+diff+' 난이도 문제를 생성 중...';
+    try{
+      const qs = await generateAIQuestions(_currentSubmode, diff);
+      state.questions = qs;
+      beginQuiz(qs, _currentSubmode, diff);
+    }catch(e){
+      showToast('AI 연결 실패. 기본 문제로 시작합니다.');
+      // Fallback to built-in
+      const fallback = getBuiltinQuestions(_currentSubmode.replace('-ai',''), diff);
+      state.questions = fallback;
+      beginQuiz(fallback, _currentSubmode, diff);
+    }
+  } else {
+    const qs = getBuiltinQuestions(_currentSubmode, diff);
+    state.questions = qs;
+    beginQuiz(qs, _currentSubmode, diff);
+  }
+}
+
+function getBuiltinQuestions(submode, diff){
+  // Normalize submode
+  const map = {'comprehensive':'reading-mc'};
+  const key = map[submode]||submode;
+  const pool = QUESTIONS_DB[key];
+  if(!pool) return QUESTIONS_DB['reading-mc'][diff]||[];
+  const qpool = pool[diff]||pool['basic']||[];
+  const selected = getUnusedQuestions(qpool, submode, diff, 10);
+  markUsed(submode, diff, selected.map(q=>q.id));
+  return selected;
+}
+
+function beginQuiz(qs, submode, diff){
+  state.questions = qs;
+  state.currentQ = 0;
+  state.correct = 0;
+  state.wrong = 0;
+  state.wrongItems = [];
+  state.startTime = Date.now();
+  
+  const labels = {
+    'vocab-enkor':'영→한','vocab-koren':'한→영','vocab-def':'영영풀이',
+    'grammar-super':'최상급','grammar-toinf':'to부정사',
+    'dialogue-tf':'T/F','dialogue-mc':'대화 이해','dialogue-fill':'빈칸완성',
+    'dialogue-order':'순서배열','reading-tf':'T/F','reading-mc':'독해',
+    'comprehensive':'통합 테스트',
+  };
+  const diffLabel = {basic:'기본',advanced:'발전',expert:'심화'};
+  document.getElementById('quiz-mode-label').textContent = (labels[submode]||submode)+' · '+(diffLabel[diff]||diff);
+  
+  showScreen('screen-quiz');
+  renderQuestion();
+}
+
+// ═══════════════════════════════════════
+// QUIZ ENGINE
+// ═══════════════════════════════════════
+function renderQuestion(){
+  const q = state.questions[state.currentQ];
+  if(!q){ showResult(); return; }
+  
+  const total = state.questions.length;
+  const cur = state.currentQ+1;
+  const pct = (state.currentQ/total*100).toFixed(0);
+  
+  document.getElementById('q-progress').style.width = pct+'%';
+  document.getElementById('q-count-label').textContent = cur+' / '+total;
+  document.getElementById('q-correct').textContent = state.correct;
+  document.getElementById('q-total').textContent = total;
+  
+  const body = document.getElementById('quiz-body');
+  
+  if(q.type==='mc') body.innerHTML = renderMC(q);
+  else if(q.type==='tf') body.innerHTML = renderTF(q);
+  else if(q.type==='fill') body.innerHTML = renderFill(q);
+  else if(q.type==='order') body.innerHTML = renderOrder(q);
+  
+  // bind events
+  if(q.type==='tf'){
+    document.getElementById('tf-t')?.addEventListener('click',()=>checkTF(true,q));
+    document.getElementById('tf-f')?.addEventListener('click',()=>checkTF(false,q));
+  }
+  if(q.type==='mc'){
+    document.querySelectorAll('.choice').forEach(btn=>{
+      btn.addEventListener('click',()=>checkMC(btn.dataset.val, q));
+    });
+  }
+  if(q.type==='fill'){
+    document.getElementById('check-fill')?.addEventListener('click',()=>checkFill(q));
+    document.getElementById('fill-input')?.addEventListener('keydown',e=>{
+      if(e.key==='Enter') checkFill(q);
+    });
+  }
+  if(q.type==='order'){
+    initDragDrop();
+    document.getElementById('check-order')?.addEventListener('click',()=>checkOrder(q));
+  }
+  
+  document.getElementById('quiz-next')?.addEventListener('click', nextQuestion);
+}
+
+function renderMC(q){
+  const labels=['A','B','C','D'];
+  const ctx = q.context ? `<div class="q-sub" style="font-size:11px;margin-bottom:8px;text-align:left;background:var(--bg3);border-radius:8px;padding:8px 10px;white-space:pre-line;">${q.context}</div>` : '';
+  const hint = q.sub ? `<div class="q-hint">${q.sub}</div>` : '';
+  return `
+    <div class="q-label">객관식 <span class="type-badge type-mc">MC</span></div>
+    <div class="q-box">${ctx}<div class="q-text">${q.q}</div>${hint}</div>
+    <div class="choices">
+      ${q.choices.map((c,i)=>`
+        <button class="choice" type="button" data-val="${c.replace(/"/g,'&quot;')}">
+          <span class="c-label">${labels[i]}</span><span>${c}</span>
+        </button>`).join('')}
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="quiz-next" type="button">다음 →</button>
+  `;
+}
+
+function renderTF(q){
+  const ctx = q.context ? `<div class="q-sub" style="font-size:11px;margin-bottom:10px;text-align:left;background:var(--bg3);border-radius:8px;padding:8px 10px;white-space:pre-line;line-height:1.6;">${q.context}</div>` : '';
+  return `
+    <div class="q-label">일치/불일치 <span class="type-badge type-tf">T/F</span></div>
+    <div class="q-box">${ctx}<div class="q-text" style="font-size:15px;">${q.q}</div></div>
+    <div class="tf-row">
+      <button class="tf-btn" id="tf-t" type="button"><div style="font-size:32px;">⭕</div><div class="tf-label">True (맞음)</div></button>
+      <button class="tf-btn" id="tf-f" type="button"><div style="font-size:32px;">❌</div><div class="tf-label">False (틀림)</div></button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="quiz-next">다음 →</button>
+  `;
+}
+
+function renderFill(q){
+  return `
+    <div class="q-label">단답형 <span class="type-badge type-fill">FILL</span></div>
+    <div class="q-box"><div class="q-text">${q.q}</div>${q.hint?`<div class="q-hint">💡 ${q.hint}</div>`:''}</div>
+    <div class="input-wrap">
+      <input class="q-input" id="fill-input" placeholder="정답을 입력하세요" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <button class="check-btn" id="check-fill">확인</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="quiz-next">다음 →</button>
+  `;
+}
+
+function renderOrder(q){
+  const shuffled = shuffle([...q.items]);
+  const itemsHtml = shuffled.map((item,i)=>`
+    <div class="order-item" draggable="true" data-idx="${i}" data-text="${encodeURIComponent(item)}">
+      <span class="drag-handle">⠿</span>
+      <span>${item}</span>
+    </div>`).join('');
+  return `
+    <div class="q-label">순서 배열 <span class="type-badge type-order">ORDER</span></div>
+    <div class="q-box"><div class="q-text" style="font-size:14px;">${q.q}</div></div>
+    <div class="order-items" id="order-items">${itemsHtml}</div>
+    <button class="check-btn" id="check-order" style="margin-top:12px;">순서 확인</button>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="quiz-next">다음 →</button>
+  `;
+}
+
+// Drag & Drop
+let dragEl = null;
+function initDragDrop(){
+  setTimeout(()=>{
+    const container = document.getElementById('order-items');
+    if(!container) return;
+    container.addEventListener('dragstart',e=>{
+      dragEl = e.target.closest('.order-item');
+      if(dragEl) { dragEl.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; }
+    });
+    container.addEventListener('dragover',e=>{
+      e.preventDefault();
+      const target = e.target.closest('.order-item');
+      if(target && target!==dragEl){
+        const rect = target.getBoundingClientRect();
+        const next = e.clientY > rect.top + rect.height/2;
+        container.insertBefore(dragEl, next ? target.nextSibling : target);
+      }
+    });
+    container.addEventListener('dragend',()=>{ dragEl?.classList.remove('dragging'); dragEl=null; });
+    
+    // Touch support
+    let touchEl=null, touchClone=null;
+    container.addEventListener('touchstart',e=>{
+      touchEl = e.target.closest('.order-item');
+      if(!touchEl) return;
+      touchEl.style.opacity='0.5';
+    },{passive:true});
+    container.addEventListener('touchmove',e=>{
+      e.preventDefault();
+      if(!touchEl) return;
+      const touch = e.touches[0];
+      const target = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.order-item');
+      if(target && target!==touchEl){
+        const rect = target.getBoundingClientRect();
+        const next = touch.clientY > rect.top + rect.height/2;
+        container.insertBefore(touchEl, next ? target.nextSibling : target);
+      }
+    },{passive:false});
+    container.addEventListener('touchend',()=>{
+      if(touchEl) touchEl.style.opacity='';
+      touchEl=null;
+    });
+  },100);
+}
+
+// Check functions
+function checkMC(val, q){
+  if(document.querySelector('.choice.correct')) return;
+  const choices = document.querySelectorAll('.choice');
+  const correct = q.answer;
+  let isCorrect = false;
+  choices.forEach(btn=>{
+    btn.classList.add('disabled');
+    btn.disabled = true;
+    const bval = btn.dataset.val;
+    if(bval===correct) btn.classList.add('correct');
+    if(bval===val){
+      if(val===correct){ isCorrect=true; }
+      else btn.classList.add('wrong');
+    }
+  });
+  recordResult(isCorrect, q.q, q.answer, val, q.explain||'');
+  showFeedback(isCorrect, q.explain||'');
+  document.getElementById('quiz-next')?.classList.add('show');
+}
+
+function checkTF(userAns, q){
+  const tBtn = document.getElementById('tf-t');
+  const fBtn = document.getElementById('tf-f');
+  if(tBtn.classList.contains('correct')||tBtn.classList.contains('wrong')) return;
+  const isCorrect = userAns === q.a;
+  if(userAns){ tBtn.classList.add(isCorrect?'correct':'wrong'); fBtn.classList.add(!isCorrect?'correct':''); }
+  else{ fBtn.classList.add(isCorrect?'correct':'wrong'); tBtn.classList.add(!isCorrect?'correct':''); }
+  recordResult(isCorrect, q.q, q.a?'True (맞음)':'False (틀림)', userAns?'True (맞음)':'False (틀림)', q.e||'');
+  showFeedback(isCorrect, q.e||'');
+  document.getElementById('quiz-next')?.classList.add('show');
+}
+
+function checkFill(q){
+  const input = document.getElementById('fill-input');
+  if(!input) return;
+  const userVal = input.value.trim();
+  if(!userVal){ showToast('정답을 입력해주세요'); return; }
+  input.disabled = true;
+  const isCorrect = normalize(userVal)===normalize(q.answer);
+  input.classList.add(isCorrect?'ok':'bad');
+  recordResult(isCorrect, q.q, q.answer, userVal, q.explain||'');
+  showFeedback(isCorrect, isCorrect?q.explain||'정답!':'정답: '+q.answer+(q.explain?' · '+q.explain:''));
+  document.getElementById('check-fill').style.display='none';
+  document.getElementById('quiz-next')?.classList.add('show');
+}
+
+function checkOrder(q){
+  const items = document.querySelectorAll('.order-item');
+  const userOrder = [...items].map(el=>decodeURIComponent(el.dataset.text));
+  const correct = q.answer;
+  let allCorrect = true;
+  items.forEach((el,i)=>{
+    const isCorrect = userOrder[i]===correct[i];
+    el.classList.add(isCorrect?'correct-pos':'wrong-pos');
+    if(!isCorrect) allCorrect=false;
+  });
+  recordResult(allCorrect, q.q, '올바른 순서', allCorrect?'정답':'오답', q.explain||'');
+  showFeedback(allCorrect, allCorrect?'완벽해요! 순서가 맞습니다 🎉':'아쉬워요. 올바른 순서를 확인하세요.');
+  document.getElementById('check-order').style.display='none';
+  document.getElementById('quiz-next')?.classList.add('show');
+}
+
+function showFeedback(ok, text){
+  const fb = document.getElementById('feedback');
+  if(!fb) return;
+  fb.className = 'feedback show '+(ok?'ok':'bad');
+  fb.innerHTML = (ok?'✅ ':'❌ ')+(text||'');
+}
+
+function recordResult(isCorrect, question, rightAns, userAns, explain){
+  if(isCorrect) state.correct++;
+  else { state.wrong++; state.wrongItems.push({q:question,a:rightAns,y:userAns,e:explain}); }
+}
+
+function normalize(s){ return s.toLowerCase().replace(/\s+/g,'').replace(/[.,!?]/g,''); }
+
+function nextQuestion(){
+  state.currentQ++;
+  if(state.currentQ >= state.questions.length) showResult();
+  else renderQuestion();
+}
+
+// ═══════════════════════════════════════
+// RESULT
+// ═══════════════════════════════════════
+function showResult(){
+  const total = state.questions.length||1;
+  const pct = Math.round(state.correct/total*100);
+  const elapsed = Math.round((Date.now()-state.startTime)/1000);
+  
+  updateStats(state.correct, total);
+  
+  const emoji = pct>=90?'🏆':pct>=70?'🎉':pct>=50?'💪':'😅';
+  const title = pct>=90?'완벽해요!':pct>=70?'잘했어요!':pct>=50?'좋아요!':'다시 도전해봐요!';
+  
+  document.getElementById('r-emoji').textContent = emoji;
+  document.getElementById('r-title').textContent = title;
+  document.getElementById('r-score').textContent = state.correct+'/'+total;
+  document.getElementById('r-pct').textContent = '정답률 '+pct+'%';
+  document.getElementById('r-correct').textContent = state.correct+' 개';
+  document.getElementById('r-wrong').textContent = state.wrong+' 개';
+  const mm=Math.floor(elapsed/60), ss=elapsed%60;
+  document.getElementById('r-time').textContent = mm+':'+(ss<10?'0':'')+ss;
+  
+  const wrongList = document.getElementById('r-wrong-list');
+  if(state.wrongItems.length){
+    wrongList.innerHTML = state.wrongItems.map(w=>`
+      <div class="wrong-item">
+        <div class="wi-q">📌 ${w.q}</div>
+        <div class="wi-a">✅ 정답: ${w.a}</div>
+        <div class="wi-y">❌ 내 답: ${w.y}</div>
+        ${w.e?`<div style="font-size:11px;color:var(--t3);margin-top:4px;">💡 ${w.e}</div>`:''}
+      </div>`).join('');
+    document.getElementById('r-wrong-wrap').style.display='block';
+  } else {
+    document.getElementById('r-wrong-wrap').style.display='none';
+  }
+  
+  showScreen('screen-result');
+}
+
+function retryQuiz(){
+  startQuiz(state.difficulty);
+}
+
+function quitQuiz(){
+  diffBack();
+}
+
+// ═══════════════════════════════════════
+// FLASHCARD
+// ═══════════════════════════════════════
+function startFlashcard(){
+  state.fcItems = shuffle([...VOCAB]);
+  state.fcIndex = 0;
+  renderFC();
+  showScreen('screen-flashcard');
+}
+
+function renderFC(){
+  const item = state.fcItems[state.fcIndex];
+  document.getElementById('fc-word').textContent = item.en;
+  document.getElementById('fc-hint').textContent = item.cat==='listen'?'대화 표현':item.cat==='reading'?'읽기 표현':'활용 표현';
+  document.getElementById('fc-answer').textContent = item.ko;
+  document.getElementById('fc-desc').textContent = item.hint||'';
+  document.getElementById('fc-inner').classList.remove('flipped');
+  const total = state.fcItems.length;
+  const pct = (state.fcIndex/total*100).toFixed(0);
+  document.getElementById('fc-progress').style.width = pct+'%';
+  document.getElementById('fc-counter').textContent = (state.fcIndex+1)+'/'+total;
+  const isLast = state.fcIndex===total-1;
+  document.getElementById('fc-next-btn').textContent = isLast?'완료 ✓':'다음 →';
+}
+
+function flipFC(){ document.getElementById('fc-inner').classList.toggle('flipped'); }
+
+function fcNext(){
+  if(state.fcIndex>=state.fcItems.length-1){ showToast('플래시카드 완료! 🎉'); showScreen('screen-vocab'); return; }
+  state.fcIndex++;
+  renderFC();
+}
+
+function fcPrev(){
+  if(state.fcIndex>0){ state.fcIndex--; renderFC(); }
+}
+
+// ═══════════════════════════════════════
+// READING STUDY
+// ═══════════════════════════════════════
+function showReadingStudy(){
+  const container = document.getElementById('passage-sentences');
+  container.innerHTML = READING_SENTENCES.map((s,i)=>`
+    <button class="sentence-card" onclick="this.classList.toggle('revealed')">
+      <div class="sentence-num">문장 ${i+1}</div>
+      <div class="sentence-en">${s.en}</div>
+      <div class="sentence-ko">→ ${s.ko}</div>
+    </button>`).join('');
+  showScreen('screen-reading-study');
+}
+
+// ═══════════════════════════════════════
+// GRAMMAR STUDY
+// ═══════════════════════════════════════
+function showGrammarStudy(){
+  const html = `
+    <div class="grammar-section">
+      <div class="grammar-section-title">⭐ 최상급 (Superlative)</div>
+      <div class="rule-item">대부분 형용사/부사: <strong>+ -est</strong> (tall → <mark>tallest</mark>)</div>
+      <div class="rule-item">-e로 끝나는 단어: <strong>+ -st</strong> (large → <mark>largest</mark>)</div>
+      <div class="rule-item">자음 + y: <strong>y→i + -est</strong> (happy → <mark>happiest</mark>)</div>
+      <div class="rule-item">단모음 + 단자음: <strong>자음 2번 + -est</strong> (big → <mark>biggest</mark>, hot → <mark>hottest</mark>)</div>
+      <div class="rule-item">-ful/-ous/-ive 등 2음절↑: <strong>most + 원급</strong> (cheerful → <mark>most cheerful</mark>)</div>
+      <div class="rule-item">불규칙: good/well → <mark>best</mark>, bad → <mark>worst</mark>, many/much → <mark>most</mark>, little → <mark>least</mark></div>
+      <div class="example-item">
+        <div class="example-en">They are <mark>the happiest</mark> animals in the woods.</div>
+        <div class="example-ko">그들은 숲에서 가장 행복한 동물들이야.</div>
+      </div>
+      <div class="example-item">
+        <div class="example-en">August is <mark>the hottest</mark> month of the year.</div>
+        <div class="example-ko">8월은 일 년 중 가장 더운 달이다.</div>
+      </div>
+      <div class="example-item">
+        <div class="example-en">💡 in + 장소/집단의 단수명사 · of + 기간/복수명사</div>
+        <div class="example-ko">Tom is the tallest <mark>in</mark> my class. / <mark>of</mark> the three.</div>
+      </div>
+    </div>
+    <div class="grammar-section">
+      <div class="grammar-section-title">🔗 to부정사의 형용사적 용법</div>
+      <div class="rule-item">형태: <strong>명사(구)/대명사 + to부정사</strong> → '~할, ~하는'으로 앞의 명사 수식</div>
+      <div class="rule-item">전치사 포함 동사구: <strong>to부정사 뒤에 전치사 유지</strong> (sit on → to sit on)</div>
+      <div class="rule-item">-thing/-body/-one: <strong>-thing + 형용사 + to부정사</strong> 순서</div>
+      <div class="example-item">
+        <div class="example-en">There was a rope <mark>to help</mark>.</div>
+        <div class="example-ko">도움이 될 밧줄이 하나 있었어. (rope ← to help)</div>
+      </div>
+      <div class="example-item">
+        <div class="example-en">I need a chair <mark>to sit on</mark>. (← sit on a chair)</div>
+        <div class="example-ko">나는 앉을 의자가 필요하다. (전치사 on 유지)</div>
+      </div>
+      <div class="example-item">
+        <div class="example-en">She wants something cold <mark>to drink</mark>.</div>
+        <div class="example-ko">그녀는 마실 차가운 것을 원한다. (-thing + 형용사 + to부정사)</div>
+      </div>
+      <div class="example-item">
+        <div class="example-en">⚠️ 다른 용법과 구별하기</div>
+        <div class="example-ko">She turned on the radio <mark>to listen to music</mark>. → 부사적 용법(목적)</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('grammar-content-wrap').innerHTML = html;
+  showScreen('screen-grammar-study');
+}
+
+// ═══════════════════════════════════════
+// PROGRESS
+// ═══════════════════════════════════════
+function renderProgress(){
+  const {total,correct} = storage.stats;
+  const pct = total>0?Math.round(correct/total*100):0;
+  const modes = ['vocab-enkor','vocab-koren','vocab-def','grammar-super','grammar-toinf','dialogue-tf','dialogue-mc','reading-tf','reading-mc'];
+  const modeLabels = {'vocab-enkor':'영→한 단어','vocab-koren':'한→영 단어','vocab-def':'영영풀이','grammar-super':'최상급','grammar-toinf':'to부정사','dialogue-tf':'대화 T/F','dialogue-mc':'대화 이해','reading-tf':'독해 T/F','reading-mc':'독해 이해'};
+  
+  let usedHtml = modes.map(m=>{
+    const totalUsed = ['basic','advanced','expert'].reduce((acc,d)=>{
+      return acc+(storage.usedIds[m+'_'+d]?.length||0);
+    },0);
+    const pool = QUESTIONS_DB[m];
+    const totalPool = pool ? Object.values(pool).reduce((a,b)=>a+(b?.length||0),0) : 0;
+    const ratio = totalPool>0?Math.min(100,Math.round(totalUsed/totalPool*100)):0;
+    return `
+      <div class="progress-row">
+        <span class="progress-label">${modeLabels[m]||m}</span>
+        <div class="progress-bar-sm"><div class="progress-bar-fill-sm" style="width:${ratio}%"></div></div>
+        <span class="progress-val">${totalUsed}문제</span>
+      </div>`;
+  }).join('');
+  
+  document.getElementById('progress-content').innerHTML = `
+    <div class="progress-section">
+      <div class="progress-section-title">📊 전체 학습 현황</div>
+      <div class="result-score" style="font-size:48px;text-align:center;padding:8px 0;">${pct}%</div>
+      <div style="text-align:center;color:var(--t2);font-size:13px;margin-bottom:16px;">총 ${total}문제 중 ${correct}개 정답</div>
+      <div class="progress-row">
+        <span class="progress-label">정답률</span>
+        <div class="progress-bar-sm"><div class="progress-bar-fill-sm" style="width:${pct}%"></div></div>
+        <span class="progress-val">${pct}%</span>
+      </div>
+    </div>
+    <div class="progress-section">
+      <div class="progress-section-title">📚 분야별 학습 진도</div>
+      ${usedHtml}
+    </div>
+    <div style="padding:0 0 20px;">
+      <button class="btn btn-ghost" onclick="resetProgress()" style="color:var(--r2);border-color:rgba(244,63,94,.3);">🗑️ 진도 초기화</button>
+    </div>
+  `;
+}
+
+function resetProgress(){
+  if(confirm('모든 학습 진도를 초기화할까요?')){
+    storage = {stats:{total:0,correct:0},usedIds:{},progress:{}};
+    saveStorage();
+    refreshHomeStats();
+    renderProgress();
+    showToast('진도가 초기화됐어요');
+  }
+}
+
+// ═══════════════════════════════════════
+// AI QUESTION GENERATION
+// ═══════════════════════════════════════
+const LESSON_CONTEXT = `
+YBM 중학교 2학년 영어 1과 "Know Me, Know You" 교과서 내용:
+
+[핵심 어휘] activity(활동), caring(배려하는), cheerful(쾌활한), creative(창의적인), curious(호기심많은), friendly(친절한), join(가입하다), brave(용감한), character(캐릭터/성격), courage(용기), fail(실패하다), feeling(감정), gather(모으다), helpful(도움이되는), hold(잡다), honey(꿀), hopeful(희망찬), knowledge(지식), luckily(다행히도), scared(무서워하는), stormy(폭풍우치는), thoughtful(사려깊은), tie(묶다), tightly(단단히), woods(숲), advice(조언), be into(~을 좋아하다), be good at(~을 잘하다), look for(찾다), take a look(살펴보다), each other(서로), main character(주인공), try to(~하려고노력하다)
+
+[주요 의사소통 기능]
+- 좋아하는 것 표현: I enjoy exercising outside. / I'm into K-pop. / be fond of
+- 성격 묘사: She is active and friendly. / What is she like?
+
+[핵심 문법]
+1. 최상급: They are the happiest animals in the woods. (형용사/부사 최상급, 불규칙 best/worst/most)
+2. to부정사의 형용사적 용법: There was a rope to help. / I need a chair to sit on.
+
+[대화 내용] 탁구동아리/축구동아리 대화, 드럼치는 Amy, 코딩동아리, 미술동아리 해인
+
+[본문] "Different but Together" - Winnie the Pooh 이야기. Pooh(꿀 좋아함, 실패해도 cheerful), Piglet(shy but brave), Owl(smartest, gives advice), Christopher Robin(thoughtful, kind)
+`;
+
+async function generateAIQuestions(submode, diff){
+  const diffKo = {basic:'기본(쉬운)',advanced:'발전(중간)',expert:'심화(어려운)'};
+  
+  const typeInstructions = {
+    'vocab-ai': '어휘 관련 4지선다 문제 10개 생성. 동의어, 반의어, 문맥 활용, 영영풀이 등 다양한 유형.',
+    'grammar-ai': '문법(최상급+to부정사형용사적용법) 관련 문제 10개. 어법판별, 빈칸완성, 오류수정, 영작 등.',
+    'dialogue-ai': '대화문 관련 문제 10개. 빈칸완성, T/F, 포인트어법, 의도파악, 대화내용이해 등.',
+    'reading-ai': '본문(Different but Together) 관련 문제 10개. 빈칸완성, T/F, 내용이해, 어법선택 등.',
+    'comprehensive': '어휘+문법+대화+본문 통합 문제 10개. 다양한 유형 혼합.',
+  };
+  
+  const prompt = `${LESSON_CONTEXT}
+
+위 교과서 내용을 바탕으로 ${diffKo[diff]} 난이도의 문제 10개를 생성해주세요.
+유형: ${typeInstructions[submode]||typeInstructions['comprehensive']}
+
+반드시 다음 JSON 형식으로만 응답하세요 (다른 텍스트 없이):
+[
+  {
+    "type": "mc",
+    "q": "문제",
+    "choices": ["보기1","보기2","보기3","보기4"],
+    "answer": "정답보기",
+    "explain": "해설"
+  },
+  {
+    "type": "tf",
+    "q": "문장 (True/False 판단)",
+    "a": true,
+    "e": "해설"
+  },
+  {
+    "type": "fill",
+    "q": "빈칸이 ___ 있는 문장",
+    "answer": "정답",
+    "hint": "힌트(선택)",
+    "explain": "해설"
+  }
+]
+
+- mc(객관식), tf(참/거짓), fill(단답형) 유형을 골고루 섞어서 생성
+- 교과서 내용에 충실하게
+- 한국어와 영어 문제 혼합
+- 정답은 반드시 choices 배열 안에 포함`;
+
+  const response = await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      model:"claude-sonnet-4-20250514",
+      max_tokens:2000,
+      messages:[{role:"user",content:prompt}]
+    })
+  });
+  
+  if(!response.ok) throw new Error('API error');
+  
+  const data = await response.json();
+  const text = data.content.map(b=>b.text||'').join('');
+  const clean = text.replace(/```json|```/g,'').trim();
+  const parsed = JSON.parse(clean);
+  
+  return parsed.map((q,i)=>{
+    const id = `ai-${submode}-${diff}-${Date.now()}-${i}`;
+    if(q.type==='tf') return {...q, id, answer:q.a, explain:q.e};
+    return {...q, id};
+  });
+}
+
+// ═══════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
+  refreshHomeStats();
+  
+  // Pre-initialize question banks lazily
+  setTimeout(()=>{
+    Object.keys(QUESTIONS_DB).forEach(k=>{
+      if(typeof QUESTIONS_DB[k].basic === 'function') QUESTIONS_DB[k] = {
+        basic: QUESTIONS_DB[k].basic(),
+        advanced: QUESTIONS_DB[k].advanced(),
+        expert: QUESTIONS_DB[k].expert(),
+      };
+    });
+  },100);
+});
+</script>
+</body>
+</html>
